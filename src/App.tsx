@@ -1,33 +1,31 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
+import { useEffect, useState } from 'react';
 import './App.css'
+import exifr, { parse } from 'exifr';
 
-function App() {
-  const [count, setCount] = useState(0)
+function App() {  
+  const [uploadedImage, setUploadedImage] = useState<any>();
+  const [imageURL, setImageUrl] = useState<any>();
+
+  const processImage = async (image: any) => {
+    const fileUrl = window.URL.createObjectURL(image.target.files![0]);
+    setImageUrl(fileUrl);
+    setUploadedImage(image);
+    let {latitude, longitude} = await exifr.gps(fileUrl)
+
+    console.log(`${latitude}, ${longitude}`)
+  }
 
   return (
     <div className="App">
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://reactjs.org" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+      <div style={{display: 'flex', width: '100vw', height: '100vh', flexDirection: 'column', alignItems: 'center', justifyContent: 'center'}}>
+        <div style={{border: '1px solid black', width: 480, height: 480, flexDirection: 'inherit', display: 'flex', alignItems: 'inherit', justifyContent: 'inherit'}}>
+          <h2>Upload your image</h2>
+          <input type='file' name='imageTest' onChange={(e) => {processImage(e)}} />
+          <img src={imageURL}style={{width: 240, height: 240, border: '1px solid black'}}/>
+          <pre id="allMetaDataSpan"></pre>
+        </div>
+
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
     </div>
   )
 }
