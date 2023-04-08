@@ -67,3 +67,8 @@ button:focus-visible {
     background-color: #f9f9f9;
   }
 }
+
+#map {
+  height: 60vh; /* The height is 400 pixels */
+  width: 80vw; /* The width is the width of the web page */
+}

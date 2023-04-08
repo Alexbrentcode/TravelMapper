@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 
 import exifr from "exifr";
+import GoogleMap from "../components/GoogleMap";
 
 interface CoordinateInterface {
     latitude: number,
@@ -8,6 +9,7 @@ interface CoordinateInterface {
 }
 
 const Homepage = () => {
+    console.log(import.meta.env)
     const [uploadedImage, setUploadedImage] = useState<any>();
     const [imageURL, setImageUrl] = useState<any>();
     const [coordinates, setCoordinates] = useState<CoordinateInterface>();
@@ -26,7 +28,7 @@ const Homepage = () => {
   
     return (
         <>
-        <div style={{border: '1px solid black', width: 480, height: 480, flexDirection: 'inherit', display: 'flex', alignItems: 'inherit', justifyContent: 'inherit'}}>
+        {/* <div style={{border: '1px solid black', width: 480, height: 480, flexDirection: 'inherit', display: 'flex', alignItems: 'inherit', justifyContent: 'inherit'}}>
           <h2>Upload your image</h2>
           <input type='file' name='imageTest' onChange={(e) => {processImage(e)}} />
           <img src={imageURL}style={{width: 240, height: 240, border: '1px solid black'}}/>
@@ -38,7 +40,9 @@ const Homepage = () => {
             </>
             }
             </div>
-        </div>
+
+        </div> */}
+        <GoogleMap />
         </>
     )
 }
