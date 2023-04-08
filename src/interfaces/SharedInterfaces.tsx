@@ -14,7 +14,8 @@ export interface GoogleMapsCoordinates {
 }
 
 export interface GoogleMapInterface {
-    position: any;
+    centralPosition: any;
+    allMetaData: MetaDataInterface[];
 }
 
 export interface InteractiveMapWrapperInterface {

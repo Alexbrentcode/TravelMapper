@@ -25,7 +25,8 @@ const InteractiveMapWrapper:FC<InteractiveMapWrapperInterface> = ({imageMetaData
     return (
         <>
           <GoogleMap 
-           position={mapCentralPoint}
+           centralPosition={mapCentralPoint}
+           allMetaData={imageMetaData}
           />
         </>
     )
