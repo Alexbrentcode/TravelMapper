@@ -69,6 +69,6 @@ button:focus-visible {
 }
 
 #map {
-  height: 60vh; /* The height is 400 pixels */
-  width: 80vw; /* The width is the width of the web page */
+  height: 100vh; /* The height is 400 pixels */
+  width: 100vw; /* The width is the width of the web page */
 }
