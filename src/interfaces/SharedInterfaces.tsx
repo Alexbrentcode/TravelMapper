@@ -1,5 +1,6 @@
 export interface MetaDataInterface {
     imageUrl: string,
+    imageName: string,
     latitude: number,
     longitude: number,
 }

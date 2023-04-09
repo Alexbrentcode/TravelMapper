@@ -22,14 +22,20 @@ const GoogleMap:FC<GoogleMapInterface> = ({centralPosition, allMetaData}) => {
             mapId: '31e4449696ca43c4',
           }
         );
-      
-        // The marker, positioned at Uluru
+
         allMetaData.forEach((uploadedImage: any) => {
-          const marker = new AdvancedMarkerView({
+          var icon = {
+            url: uploadedImage.imageUrl,
+            scaledSize: new google.maps.Size(75, 75)
+          }
+
+          const customImageMarker = new google.maps.Marker({
             map: map,
             position: {lat: uploadedImage.latitude, lng: uploadedImage.longitude},
-            title: 'Uluru'
-          });
+            title: uploadedImage.imageName,
+            icon: icon
+          })
+
         })
 
       }

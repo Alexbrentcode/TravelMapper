@@ -12,12 +12,13 @@ const ImageUpload:FC<ImageUploadInterface> = ({setImageMetaData}) => {
     const processImage = async (image: any) => {
         resetUploadedImageState();
         const imageFileArray = Array.from(image.target.files)
+        console.log(`Total file is ${JSON.stringify(image.target.files[0].name)}`)
         
         for(let i = 0; i < imageFileArray.length; i++){
             const thisImage: any = imageFileArray[i];
             const fileUrl = window.URL.createObjectURL(thisImage);
             let {latitude, longitude} = await exifr.gps(fileUrl)
-            setImageMetaData((prevState: any) => [...prevState, {imageUrl: fileUrl, latitude: latitude, longitude: longitude}]);
+            setImageMetaData((prevState: any) => [...prevState, {imageUrl: fileUrl, imageName: thisImage.name, latitude: latitude, longitude: longitude}]);
         }
     }
     return (
