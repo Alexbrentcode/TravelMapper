@@ -22,7 +22,7 @@ const Homepage = () => {
             <ImageUpload 
                 setImageMetaData={setImageMetaData}
             />
-                <div>
+                <div style={{border: '1px solid black', width: 'auto', height: '50%', overflowY: 'scroll', textAlign: 'left', paddingLeft: 50}}>
                 {imageMetaData.length > 0 && (
                     imageMetaData.map((imageData: any) => {
                         return (

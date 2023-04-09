@@ -11,7 +11,7 @@ const GoogleMap:FC<GoogleMapInterface> = ({centralPosition, allMetaData}) => {
       //@ts-ignore
       const { Map } = await google.maps.importLibrary("maps") as google.maps.MapsLibrary;
       const { AdvancedMarkerView } = await google.maps.importLibrary("marker") as google.maps.MarkerLibrary;
-    
+      let processedCoordinatesForLineDrawing: any = [];
       // The map, centered at Uluru
       map = new Map(
         document.getElementById('map') as HTMLElement,
@@ -33,6 +33,7 @@ const GoogleMap:FC<GoogleMapInterface> = ({centralPosition, allMetaData}) => {
           url: uploadedImage.imageUrl,
           scaledSize: new google.maps.Size(75, 75)
         }
+        processedCoordinatesForLineDrawing.push(new google.maps.LatLng(uploadedImage.latitude, uploadedImage.longitude))
 
         const customImageMarker = new google.maps.Marker({
           map: map,
@@ -41,6 +42,15 @@ const GoogleMap:FC<GoogleMapInterface> = ({centralPosition, allMetaData}) => {
           icon: icon
         })
 
+      })
+     
+
+      const placeholderPolyline = new google.maps.Polyline({
+        map: map,
+        path: processedCoordinatesForLineDrawing,
+        visible: true,
+        zIndex: 100,
+        strokeColor: 'black'
       })
 
     }
