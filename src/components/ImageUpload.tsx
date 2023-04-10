@@ -19,7 +19,9 @@ const ImageUpload:FC<ImageUploadInterface> = ({setImageMetaData}) => {
             const fileUrl = window.URL.createObjectURL(thisImage);
             if( await exifr.gps(fileUrl)){
                 let {latitude, longitude} = await exifr.gps(fileUrl)
-                setImageMetaData((prevState: any) => [...prevState, {imageUrl: fileUrl, imageName: thisImage.name, latitude: latitude, longitude: longitude}]);
+                let testAllData = await exifr.parse(fileUrl);
+                console.log(`All test data ${JSON.stringify(testAllData)}`)
+                setImageMetaData((prevState: any) => [...prevState, {imageUrl: fileUrl, imageName: thisImage.name, latitude: latitude, longitude: longitude, orientation: testAllData.Orientation, dateTime: testAllData.DateTimeOriginal}]);
             }
 
         }
