@@ -1,8 +1,23 @@
-import { FC, useEffect } from "react";
-import { GoogleMapInterface } from "../interfaces/SharedInterfaces";
+import { FC, useEffect, useState } from "react";
+import { GoogleMapInterface, MetaDataInterface } from "../interfaces/SharedInterfaces";
 import ImageUpload from "./ImageUpload";
 
 const GoogleMap:FC<GoogleMapInterface> = ({centralPosition, allMetaData}) => {
+
+  const [modalOpen, setModalOpen] = useState<boolean>(false);
+  const [currentImage, setCurrentImage ] = useState<MetaDataInterface>();
+
+  const handleModalClose = () => {
+    console.log('Closing modal')
+    //e.stopPropagation();
+    if(modalOpen){
+      setModalOpen(false);
+    }
+  }
+
+  useEffect(() => {
+    console.log(currentImage)
+  },[currentImage])
 
   async function initMap(): Promise<void> {
     // Initialize and add the map
@@ -22,11 +37,11 @@ const GoogleMap:FC<GoogleMapInterface> = ({centralPosition, allMetaData}) => {
         }
       );
 
-      const midPointMarker = new AdvancedMarkerView({
-        map: map,
-        position: {lat: 54.4880875, lng: -3.210903472222222},
-        title: 'Mid point marker'
-      }) 
+      // const midPointMarker = new AdvancedMarkerView({
+      //   map: map,
+      //   position: centralPosition,
+      //   title: 'Mid point marker'
+      // }) 
 
       allMetaData.forEach((uploadedImage: any) => {
         var icon = {
@@ -42,14 +57,22 @@ const GoogleMap:FC<GoogleMapInterface> = ({centralPosition, allMetaData}) => {
           icon: icon
         })
 
+        customImageMarker.addListener('click', (e: any) => {
+          const clickedImageName = e.domEvent.target.parentElement.title
+          console.log(e.domEvent.target.parentElement.title)
+          allMetaData.filter((el) => {
+            if(el.imageName === clickedImageName ){
+              setCurrentImage(el);
+              setModalOpen(true);
+            }
+          })
+        })
       })
-     
-
       const placeholderPolyline = new google.maps.Polyline({
         map: map,
         path: processedCoordinatesForLineDrawing,
         visible: true,
-        zIndex: 100,
+        zIndex: 6,
         strokeColor: 'black'
       })
 
@@ -59,7 +82,23 @@ const GoogleMap:FC<GoogleMapInterface> = ({centralPosition, allMetaData}) => {
     
     return (
         <>
-            <div id="map"></div>
+            <div onClick={handleModalClose} id="map"></div>
+            {modalOpen &&
+            <div style={{padding: 30, width: 'max-content', height: 600, position: 'absolute', zIndex: 10, border: '1px solid black', backgroundColor: '#fefefefe',
+             left: 0, right: 0, top: 0, bottom: 0, marginLeft: 'auto', marginRight: 'auto', marginTop: 'auto', marginBottom: 'auto'
+            }}>
+              {currentImage &&
+              <>
+                <img
+                  src={currentImage?.imageUrl}
+                  style={{height: '80%'}}
+                />
+                <p>Title: {currentImage?.imageName}</p>
+                <p>Date Taken: {currentImage?.dateTime.toString()}</p>
+                </>
+            }
+            </div>
+            }
         </>
     )
 }

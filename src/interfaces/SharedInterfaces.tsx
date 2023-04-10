@@ -3,6 +3,8 @@ export interface MetaDataInterface {
     imageName: string,
     latitude: number,
     longitude: number,
+    orientation?: string,
+    dateTime?: any
 }
 
 export interface ImageUploadInterface {

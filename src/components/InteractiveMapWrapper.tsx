@@ -3,6 +3,7 @@ import GoogleMap from "./GoogleMap"
 import { GoogleMapsCoordinates, InteractiveMapWrapperInterface } from "../interfaces/SharedInterfaces";
 
 const InteractiveMapWrapper:FC<InteractiveMapWrapperInterface> = ({imageMetaData}) => {
+    console.log(`DATA ${JSON.stringify(imageMetaData)}`)
     const initialState = {
         lat: 51.513974,
         lng: -0.030228
@@ -14,7 +15,6 @@ const InteractiveMapWrapper:FC<InteractiveMapWrapperInterface> = ({imageMetaData
     //metersPerPx = 156543.03392 * Math.cos(latLng.lat() * Math.PI / 180) / Math.pow(2, zoom)
 
     const [mapCentralPoint, setMapCentralPoint] = useState<GoogleMapsCoordinates>(initialState)
-
 
     const calculateMidPointOfAllCoordinates = (imageMetaData: any) => {
         //Assign totals...
