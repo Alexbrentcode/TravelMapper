@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
-import GoogleMap from "../components/GoogleMap";
 import { MetaDataInterface } from "../interfaces/SharedInterfaces"
 import ImageUpload from "../components/ImageUpload";
 import InteractiveMapWrapper from "../components/InteractiveMapWrapper";
+import { getGeoCodeByString } from "../api/Geocode/GeocodeApi";
 
 const Homepage = () => {
     const [imageMetaData, setImageMetaData] = useState<MetaDataInterface[]>([]);
