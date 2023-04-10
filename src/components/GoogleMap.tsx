@@ -1,27 +1,50 @@
 import { FC, useEffect, useState } from "react";
 import { GoogleMapInterface, MetaDataInterface } from "../interfaces/SharedInterfaces";
 import ImageUpload from "./ImageUpload";
+import { getGeoCodeByCoordinates, getGeoCodeByString } from "../api/Geocode/GeocodeApi";
+import { formatDateDDMMYYYYHHMM, getDateBySecondsSinceEpoch } from "../helperMethods";
 
 const GoogleMap:FC<GoogleMapInterface> = ({centralPosition, allMetaData}) => {
 
   const [modalOpen, setModalOpen] = useState<boolean>(false);
   const [currentImage, setCurrentImage ] = useState<MetaDataInterface>();
-
-  const handleModalClose = () => {
-    console.log('Closing modal')
-    //e.stopPropagation();
+  const [currentLocation, setCurrentLocation] = useState<any>('');
+  let map: any;
+  const handleModalClose = (e: any) => {
     if(modalOpen){
       setModalOpen(false);
     }
   }
+//   useEffect(() => {
+//     console.log(getGeoCodeByString('Bangkok Airport'));
+//     console.log(getGeoCodeByString('Heathrow Airport UK'));  
+// })
 
-  useEffect(() => {
-    console.log(currentImage)
-  },[currentImage])
+//allMetaData = [
+//   {
+//     imageUrl: '',
+//     imageName: 'Heathrow',
+//     latitude: 51.4560987,
+//     longitude: -0.4943776
+//   },
+//   {
+//     imageUrl: '',
+//     imageName: 'Don Mueang',
+//     latitude: 13.8929043,
+//     longitude: 100.589819
+//   },
+  // {
+  //   imageUrl: '',
+  //   imageName: 'Birmingham',
+  //   latitude: 13.8929043,
+  //   longitude: 100.589819
+  // },
 
-  async function initMap(): Promise<void> {
+// ]
+
+  async function initMap(map: any): Promise<void> {
     // Initialize and add the map
-      let map: any;
+
       // Request needed libraries.
       //@ts-ignore
       const { Map } = await google.maps.importLibrary("maps") as google.maps.MapsLibrary;
@@ -36,12 +59,6 @@ const GoogleMap:FC<GoogleMapInterface> = ({centralPosition, allMetaData}) => {
           mapId: '31e4449696ca43c4',
         }
       );
-
-      // const midPointMarker = new AdvancedMarkerView({
-      //   map: map,
-      //   position: centralPosition,
-      //   title: 'Mid point marker'
-      // }) 
 
       allMetaData.forEach((uploadedImage: any) => {
         var icon = {
@@ -73,30 +90,49 @@ const GoogleMap:FC<GoogleMapInterface> = ({centralPosition, allMetaData}) => {
         path: processedCoordinatesForLineDrawing,
         visible: true,
         zIndex: 6,
-        strokeColor: 'black'
+        strokeColor: 'black',      
       })
 
     }
     
-    initMap();
-    
+    useEffect(() => {
+      initMap(map);
+    }, [centralPosition]);
+
+    const fetchLocationDisplayName = async () => {
+      console.log('In fetch')
+      const res = await getGeoCodeByCoordinates(currentImage!.latitude, currentImage!.longitude)
+      console.log(`Res is ${res.displayName}`)
+      setCurrentLocation(res.display_name);
+    }
+
+    useEffect(() => {
+      if(currentImage){
+        fetchLocationDisplayName();
+      }
+    }, [currentImage])
+
     return (
         <>
-            <div onClick={handleModalClose} id="map"></div>
+            <div id="map"></div>
             {modalOpen &&
-            <div style={{padding: 30, width: 'max-content', height: 600, position: 'absolute', zIndex: 10, border: '1px solid black', backgroundColor: '#fefefefe',
-             left: 0, right: 0, top: 0, bottom: 0, marginLeft: 'auto', marginRight: 'auto', marginTop: 'auto', marginBottom: 'auto'
-            }}>
-              {currentImage &&
-              <>
-                <img
-                  src={currentImage?.imageUrl}
-                  style={{height: '80%'}}
-                />
-                <p>Title: {currentImage?.imageName}</p>
-                <p>Date Taken: {currentImage?.dateTime.toString()}</p>
-                </>
-            }
+            <div onClick={(e) => handleModalClose(e)} style={{position: 'absolute', width: '100%', height: '100%'}}>
+              <div onClick={(e) => e.stopPropagation()} style={{padding: 30, width: 'max-content', height: 600, position: 'absolute', zIndex: 10, border: '1px solid black', backgroundColor: '#fefefefe',
+              left: 0, right: 0, top: 0, bottom: 0, marginLeft: 'auto', marginRight: 'auto', marginTop: 'auto', marginBottom: 'auto'
+              }}>
+                {currentImage &&
+                <>
+                  <img
+                    src={currentImage?.imageUrl}
+                    style={{height: '80%'}}
+                  />
+                  <p>Title: {currentImage?.imageName}</p>
+                  <p>Date Taken: {formatDateDDMMYYYYHHMM(currentImage.dateTime)}</p>
+                  {/* <p>Epoch {getDateBySecondsSinceEpoch(currentImage.dateTime)}</p> */}
+                  <p style={{width: '600px',  wordWrap: 'normal'}}>Location {currentLocation}</p>
+                  </>
+              }
+              </div>
             </div>
             }
         </>
