@@ -1,58 +1,60 @@
 import { FC, useEffect, useState } from "react";
 import GoogleMap from "./GoogleMap"
-import { GoogleMapsCoordinates, InteractiveMapWrapperInterface } from "../interfaces/SharedInterfaces";
+import { CoordianteInterface, InteractiveMapWrapperInterface } from "../interfaces/SharedInterfaces";
+import UnsetImangeFooter from "./UnsetImangeFooter";
+import { calculateMidPointOfAllCoordinates, removeItemFromState } from "../helperMethods";
 
-const InteractiveMapWrapper:FC<InteractiveMapWrapperInterface> = ({imageMetaData}) => {
-    console.log(`DATA ${JSON.stringify(imageMetaData)}`)
+const InteractiveMapWrapper: FC<InteractiveMapWrapperInterface> = ({ imageMetaData, imagesWithoutGPSMetaData, setImageMetaData, setImagesWithoutGPSMetaData }) => {
     const initialState = {
         lat: 51.513974,
         lng: -0.030228
     }
-
-    //Mean of 5 testImages form The Great Gable
-    //MID LAT 54.4880875
-    //MID LGN -3.210903472222222
-    //metersPerPx = 156543.03392 * Math.cos(latLng.lat() * Math.PI / 180) / Math.pow(2, zoom)
-
-    const [mapCentralPoint, setMapCentralPoint] = useState<GoogleMapsCoordinates>(initialState)
-
-    const calculateMidPointOfAllCoordinates = (imageMetaData: any) => {
-        //Assign totals...
-        let [latitudeCount, longitudeCount] = [imageMetaData.length, imageMetaData.length]
-        let [latitudeMean, longitudeMean] = [0,0];
-    
-        imageMetaData.forEach((imageCoord: any) => {
-            isNaN(imageCoord.latitude) ? latitudeCount-- : latitudeMean += imageCoord.latitude
-            isNaN(imageCoord.longitude) ? longitudeCount-- : longitudeMean += imageCoord.longitude
-        })
-
-        //Return to 15th decimal as it's the max degree of accuracy recorded in coordiantes
-        return {meanLat: Number((latitudeMean/ latitudeCount).toFixed(15)), meanLng: Number((longitudeMean/ longitudeCount).toFixed(15))}
-    }
-
+    const [mapCentralPoint, setMapCentralPoint] = useState<CoordianteInterface>(initialState)
+    const [userSetCoordinates, setUserSetCoordinates] = useState<CoordianteInterface>();
+    const [currentUnsetImage, setCurrentUnsetImage] = useState<any>();
 
     useEffect(() => {
-        if(imageMetaData.length > 0){
-            let {meanLat, meanLng} = calculateMidPointOfAllCoordinates(imageMetaData);
-            console.log('Final calculated values are lat ' + meanLat + ' / lng ' + meanLng)
-
+        if (imageMetaData.length > 0) {
+            let { meanLat, meanLng } = calculateMidPointOfAllCoordinates(imageMetaData);
             //If numbers are valid, assign to centralPoint
-            if(typeof meanLat === 'number' && typeof meanLng === 'number'){
+            if (typeof meanLat === 'number' && typeof meanLng === 'number') {
                 setMapCentralPoint({
                     lat: meanLat,
                     lng: meanLng
                 })
             }
         }
-
     }, [imageMetaData])
+
+
+    useEffect(() => {
+        if (userSetCoordinates && currentUnsetImage) {
+            setCurrentUnsetImage(false);
+            console.log(userSetCoordinates)
+            setImageMetaData((prevState: any) => [...prevState, {
+                imageUrl: imagesWithoutGPSMetaData[currentUnsetImage.imageIdx].imageUrl, imageName: imagesWithoutGPSMetaData[currentUnsetImage.imageIdx].imageName,
+                latitude: userSetCoordinates!.lat, longitude: userSetCoordinates!.lng,
+                orientation: "", dateTime: ""
+            }]);
+            //Remove that item from state
+            removeItemFromState(setImagesWithoutGPSMetaData, imagesWithoutGPSMetaData, currentUnsetImage.imageName)
+
+        }
+    }, [userSetCoordinates])
 
     return (
         <>
-          <GoogleMap 
-           centralPosition={mapCentralPoint}
-           allMetaData={imageMetaData}
-          />
+            <GoogleMap
+                centralPosition={mapCentralPoint}
+                allMetaData={imageMetaData}
+                setUserSetCoordinates={setUserSetCoordinates}
+            />
+            {imagesWithoutGPSMetaData.length > 0 && (
+                <UnsetImangeFooter
+                    unsetImages={imagesWithoutGPSMetaData}
+                    setCurrentUnsetImage={setCurrentUnsetImage}
+                />
+            )}
         </>
     )
 }
