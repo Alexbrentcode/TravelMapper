@@ -3,10 +3,8 @@ import exifr from "exifr";
 import { ImageUploadInterface } from "../interfaces/SharedInterfaces";
 
 const ImageUpload: FC<ImageUploadInterface> = ({ setImageMetaData, setImagesWithoutGPSMetaData }) => {
-
-
+    // Reset current state to avoid duplicating items in state
     const resetUploadedImageState = () => {
-        // Reset current state to avoid duplicating items in state
         setImageMetaData([])
     }
 
@@ -24,7 +22,6 @@ const ImageUpload: FC<ImageUploadInterface> = ({ setImageMetaData, setImagesWith
             } else {
                 setImagesWithoutGPSMetaData((prevState: any) => [...prevState, { imageUrl: fileUrl, imageName: thisImage.name, imgObj: thisImage }])
             }
-
         }
     }
     return (
@@ -34,25 +31,7 @@ const ImageUpload: FC<ImageUploadInterface> = ({ setImageMetaData, setImagesWith
                 alignItems: 'center', justifyContent: 'center', position: 'absolute', zIndex: 5, backgroundColor: 'white'
             }}>
                 <h1>Travel Mapper</h1>
-                {/* <h2>Where did your trip begin?</h2>
-                <input type="text" />
-                <h2>Where did your trip end?</h2>
-                <input type="text" />
-                <h2>Upload your images</h2> */}
                 <input type='file' name='imageTest' multiple={true} onChange={(e) => { processImage(e) }} />
-                {/* <div style={{ border: '1px solid black', width: 'auto', height: '50%', overflowY: 'scroll', textAlign: 'left', paddingLeft: 50 }}>
-                    {imageMetaData.length > 0 && (
-                        imageMetaData.map((imageData: any) => {
-                            return (
-                                <>
-                                    <p>Lat: {imageData.latitude}</p>
-                                    <p>Long: {imageData.longitude} </p>
-                                </>
-                            )
-                        })
-                    )
-                    }
-                </div> */}
             </div >
         </>
 

@@ -19,9 +19,8 @@ const GoogleMap: FC<GoogleMapInterface> = ({ centralPosition, allMetaData, setUs
   async function initMap(map: any): Promise<void> {
     //@ts-ignore
     const { Map } = await google.maps.importLibrary("maps") as google.maps.MapsLibrary;
-    const { AdvancedMarkerView } = await google.maps.importLibrary("marker") as google.maps.MarkerLibrary;
+    //const { AdvancedMarkerView } = await google.maps.importLibrary("marker") as google.maps.MarkerLibrary;
     let processedCoordinatesForLineDrawing: any = [];
-    // The map, centered at Uluru
     map = new Map(
       document.getElementById('map') as HTMLElement,
       {
@@ -31,6 +30,7 @@ const GoogleMap: FC<GoogleMapInterface> = ({ centralPosition, allMetaData, setUs
       }
     );
 
+    //Iterate through iamges and set as markers
     allMetaData.forEach((uploadedImage: any) => {
       var icon = {
         url: uploadedImage.imageUrl,
@@ -58,12 +58,12 @@ const GoogleMap: FC<GoogleMapInterface> = ({ centralPosition, allMetaData, setUs
     })
 
     //Handler for getting coordiantes from map
-    //TODO make this conditional
     map.addListener("click", (mapsMouseEvent: any) => {
       setUserSetCoordinates({ lat: mapsMouseEvent.latLng.toJSON().lat, lng: mapsMouseEvent.latLng.toJSON().lng })
     })
 
 
+    //Current placeholder for linking each marker together
     const placeholderPolyline = new google.maps.Polyline({
       map: map,
       path: processedCoordinatesForLineDrawing,
@@ -74,14 +74,13 @@ const GoogleMap: FC<GoogleMapInterface> = ({ centralPosition, allMetaData, setUs
 
   }
 
+  //When the central coordiantes are calculated - reposition map
   useEffect(() => {
     initMap(map);
   }, [centralPosition]);
 
   const fetchLocationDisplayName = async () => {
-    //console.log('In fetch')
     const res = await getGeoCodeByCoordinates(currentImage!.lat, currentImage!.lng)
-    //console.log(`Res is ${res.displayName}`)
     setCurrentLocation(res.display_name);
   }
 
