@@ -3,7 +3,7 @@ import GoogleMap from "./GoogleMap"
 import { CoordianteInterface, InteractiveMapWrapperInterface } from "../interfaces/SharedInterfaces";
 import UnsetImangeFooter from "./UnsetImangeFooter";
 
-const InteractiveMapWrapper: FC<InteractiveMapWrapperInterface> = ({ imageMetaData, imagesWithoutGPSMetaData, setImageMetaData }) => {
+const InteractiveMapWrapper: FC<InteractiveMapWrapperInterface> = ({ imageMetaData, imagesWithoutGPSMetaData, setImageMetaData, setImagesWithoutGPSMetaData }) => {
     const initialState = {
         lat: 51.513974,
         lng: -0.030228
@@ -31,8 +31,6 @@ const InteractiveMapWrapper: FC<InteractiveMapWrapperInterface> = ({ imageMetaDa
     useEffect(() => {
         if (imageMetaData.length > 0) {
             let { meanLat, meanLng } = calculateMidPointOfAllCoordinates(imageMetaData);
-            //console.log('Final calculated values are lat ' + meanLat + ' / lng ' + meanLng)
-
             //If numbers are valid, assign to centralPoint
             if (typeof meanLat === 'number' && typeof meanLng === 'number') {
                 setMapCentralPoint({
@@ -44,15 +42,32 @@ const InteractiveMapWrapper: FC<InteractiveMapWrapperInterface> = ({ imageMetaDa
 
     }, [imageMetaData])
 
+    const removeItemFromState = (setState: any, state: any, key: string) => {
+        console.log(`Key is ${key}`)
+
+        const index = state.findIndex((item: any) => item.imageName === key)
+        // console.log(`State before mutation ${JSON.stringify(state)}`)
+        console.log(`Index ${index}`)
+        setState([
+            ...state.slice(0, index),
+            ...state.slice(index + 1)
+        ]);
+
+        console.log(`State after mutation ${JSON.stringify(state)}`)
+    }
+
     useEffect(() => {
         if (userSetCoordinates && currentUnsetImage) {
             setCurrentUnsetImage(false);
             console.log(userSetCoordinates)
             setImageMetaData((prevState: any) => [...prevState, {
-                imageUrl: imagesWithoutGPSMetaData[currentUnsetImage].imageUrl, imageName: imagesWithoutGPSMetaData[currentUnsetImage].imageName,
+                imageUrl: imagesWithoutGPSMetaData[currentUnsetImage.imageIdx].imageUrl, imageName: imagesWithoutGPSMetaData[currentUnsetImage.imageIdx].imageName,
                 latitude: userSetCoordinates!.lat, longitude: userSetCoordinates!.lng,
                 orientation: "", dateTime: ""
             }]);
+            //Remove that item from state
+            removeItemFromState(setImagesWithoutGPSMetaData, imagesWithoutGPSMetaData, currentUnsetImage.imageName)
+
         }
     }, [userSetCoordinates])
 
@@ -63,10 +78,12 @@ const InteractiveMapWrapper: FC<InteractiveMapWrapperInterface> = ({ imageMetaDa
                 allMetaData={imageMetaData}
                 setUserSetCoordinates={setUserSetCoordinates}
             />
-            <UnsetImangeFooter
-                unsetImages={imagesWithoutGPSMetaData}
-                setCurrentUnsetImage={setCurrentUnsetImage}
-            />
+            {imagesWithoutGPSMetaData.length > 0 && (
+                <UnsetImangeFooter
+                    unsetImages={imagesWithoutGPSMetaData}
+                    setCurrentUnsetImage={setCurrentUnsetImage}
+                />
+            )}
         </>
     )
 }

@@ -19,7 +19,6 @@ export interface ImageWithNoGpsMetaDataInterface {
     imgObj: any
 }
 
-
 export interface TripObject {
     tripStarObj: LocationDataObject;
     tripEndObj: LocationDataObject;
@@ -49,6 +48,7 @@ export interface InteractiveMapWrapperInterface {
     imageMetaData: TripImageObject[];
     imagesWithoutGPSMetaData: ImageWithNoGpsMetaDataInterface[];
     setImageMetaData: (value: any) => void;
+    setImagesWithoutGPSMetaData: (value: any) => void;
 }
 
 export interface UnsetImangeFooterInterface {

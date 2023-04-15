@@ -10,7 +10,7 @@ const Homepage = () => {
 
     return (
         <>
-            <div style={{ height: '100%', width: '100%', display: 'flex' }}>
+            <div style={{ height: '100%', width: '100%', display: 'flex', justifyContent: 'end' }}>
                 {imageMetaData.length === 0 && (
                     <ImageUpload
                         setImageMetaData={setImageMetaData}
@@ -21,6 +21,7 @@ const Homepage = () => {
                     imageMetaData={imageMetaData}
                     setImageMetaData={setImageMetaData}
                     imagesWithoutGPSMetaData={imagesWithoutGPSMetaData}
+                    setImagesWithoutGPSMetaData={setImagesWithoutGPSMetaData}
                 />
             </div >
         </>

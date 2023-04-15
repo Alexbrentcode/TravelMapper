@@ -17,8 +17,8 @@ const UnsetImangeFooter: FC<UnsetImangeFooterInterface> = ({ unsetImages, setCur
                                 <img
                                     src={unsetImage.imageUrl}
                                     style={{ position: 'relative', height: 200, paddingLeft: 32, paddingRight: 32 }}
-                                    id={idx.toString()}
-                                    onClick={(e) => { setCurrentUnsetImage(e.currentTarget.id) }}
+                                    id={unsetImages[idx].imgObj.name}
+                                    onClick={(e) => { setCurrentUnsetImage({ imageName: e.currentTarget.id, imageIdx: idx }) }}
                                 />
                             </>
                         )

@@ -20,7 +20,6 @@ const ImageUpload: FC<ImageUploadInterface> = ({ setImageMetaData, setImagesWith
             if (await exifr.gps(fileUrl)) {
                 let { latitude, longitude } = await exifr.gps(fileUrl)
                 let testAllData = await exifr.parse(fileUrl);
-
                 setImageMetaData((prevState: any) => [...prevState, { imageUrl: fileUrl, imageName: thisImage.name, latitude: latitude, longitude: longitude, orientation: testAllData.Orientation, dateTime: testAllData.DateTimeOriginal }]);
             } else {
                 setImagesWithoutGPSMetaData((prevState: any) => [...prevState, { imageUrl: fileUrl, imageName: thisImage.name, imgObj: thisImage }])
@@ -31,7 +30,7 @@ const ImageUpload: FC<ImageUploadInterface> = ({ setImageMetaData, setImagesWith
     return (
         <>
             <div style={{
-                border: '1px solid red', width: 480, height: 680, flexDirection: 'column', display: 'flex',
+                border: '1px solid red', width: 480, height: '100%', flexDirection: 'column', display: 'flex',
                 alignItems: 'center', justifyContent: 'center', position: 'absolute', zIndex: 5, backgroundColor: 'white'
             }}>
                 <h1>Travel Mapper</h1>
