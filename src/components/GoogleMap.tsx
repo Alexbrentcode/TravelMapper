@@ -1,5 +1,5 @@
 import { FC, useEffect, useState } from "react";
-import { GoogleMapInterface, MetaDataInterface } from "../interfaces/SharedInterfaces";
+import { GoogleMapInterface, TripImageObject } from "../interfaces/SharedInterfaces";
 import ImageUpload from "./ImageUpload";
 import { getGeoCodeByCoordinates, getGeoCodeByString } from "../api/Geocode/GeocodeApi";
 import { formatDateDDMMYYYYHHMM, getDateBySecondsSinceEpoch } from "../helperMethods";
@@ -7,7 +7,7 @@ import { formatDateDDMMYYYYHHMM, getDateBySecondsSinceEpoch } from "../helperMet
 const GoogleMap: FC<GoogleMapInterface> = ({ centralPosition, allMetaData, setUserSetCoordinates }) => {
 
   const [modalOpen, setModalOpen] = useState<boolean>(false);
-  const [currentImage, setCurrentImage] = useState<MetaDataInterface>();
+  const [currentImage, setCurrentImage] = useState<TripImageObject>();
   const [currentLocation, setCurrentLocation] = useState<any>('');
   let map: any;
   const handleModalClose = (e: any) => {
@@ -15,37 +15,8 @@ const GoogleMap: FC<GoogleMapInterface> = ({ centralPosition, allMetaData, setUs
       setModalOpen(false);
     }
   }
-  //   useEffect(() => {
-  //     console.log(getGeoCodeByString('Bangkok Airport'));
-  //     console.log(getGeoCodeByString('Heathrow Airport UK'));  
-  // })
-
-  //allMetaData = [
-  //   {
-  //     imageUrl: '',
-  //     imageName: 'Heathrow',
-  //     latitude: 51.4560987,
-  //     longitude: -0.4943776
-  //   },
-  //   {
-  //     imageUrl: '',
-  //     imageName: 'Don Mueang',
-  //     latitude: 13.8929043,
-  //     longitude: 100.589819
-  //   },
-  // {
-  //   imageUrl: '',
-  //   imageName: 'Birmingham',
-  //   latitude: 13.8929043,
-  //   longitude: 100.589819
-  // },
-
-  // ]
 
   async function initMap(map: any): Promise<void> {
-    // Initialize and add the map
-
-    // Request needed libraries.
     //@ts-ignore
     const { Map } = await google.maps.importLibrary("maps") as google.maps.MapsLibrary;
     const { AdvancedMarkerView } = await google.maps.importLibrary("marker") as google.maps.MarkerLibrary;
@@ -109,7 +80,7 @@ const GoogleMap: FC<GoogleMapInterface> = ({ centralPosition, allMetaData, setUs
 
   const fetchLocationDisplayName = async () => {
     //console.log('In fetch')
-    const res = await getGeoCodeByCoordinates(currentImage!.latitude, currentImage!.longitude)
+    const res = await getGeoCodeByCoordinates(currentImage!.lat, currentImage!.lng)
     //console.log(`Res is ${res.displayName}`)
     setCurrentLocation(res.display_name);
   }
@@ -137,7 +108,6 @@ const GoogleMap: FC<GoogleMapInterface> = ({ centralPosition, allMetaData, setUs
                 />
                 <p>Title: {currentImage?.imageName}</p>
                 <p>Date Taken: {currentImage.dateTime && formatDateDDMMYYYYHHMM(currentImage.dateTime)}</p>
-                {/* <p>Epoch {getDateBySecondsSinceEpoch(currentImage.dateTime)}</p> */}
                 <p style={{ width: '600px', wordWrap: 'normal' }}>Location {currentLocation}</p>
               </>
             }

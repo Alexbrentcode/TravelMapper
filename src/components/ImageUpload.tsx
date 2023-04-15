@@ -2,7 +2,7 @@ import { FC } from "react"
 import exifr from "exifr";
 import { ImageUploadInterface } from "../interfaces/SharedInterfaces";
 
-const ImageUpload: FC<ImageUploadInterface> = ({ setImageMetaData, setImagesWithoutGPSMetaData, setTripLocations }) => {
+const ImageUpload: FC<ImageUploadInterface> = ({ setImageMetaData, setImagesWithoutGPSMetaData }) => {
 
 
     const resetUploadedImageState = () => {

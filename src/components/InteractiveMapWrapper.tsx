@@ -1,6 +1,6 @@
 import { FC, useEffect, useState } from "react";
 import GoogleMap from "./GoogleMap"
-import { GoogleMapsCoordinates, InteractiveMapWrapperInterface } from "../interfaces/SharedInterfaces";
+import { CoordianteInterface, InteractiveMapWrapperInterface } from "../interfaces/SharedInterfaces";
 import UnsetImangeFooter from "./UnsetImangeFooter";
 
 const InteractiveMapWrapper: FC<InteractiveMapWrapperInterface> = ({ imageMetaData, imagesWithoutGPSMetaData, setImageMetaData }) => {
@@ -8,8 +8,8 @@ const InteractiveMapWrapper: FC<InteractiveMapWrapperInterface> = ({ imageMetaDa
         lat: 51.513974,
         lng: -0.030228
     }
-    const [mapCentralPoint, setMapCentralPoint] = useState<GoogleMapsCoordinates>(initialState)
-    const [userSetCoordinates, setUserSetCoordinates] = useState<GoogleMapsCoordinates>();
+    const [mapCentralPoint, setMapCentralPoint] = useState<CoordianteInterface>(initialState)
+    const [userSetCoordinates, setUserSetCoordinates] = useState<CoordianteInterface>();
     const [inSetUserCoorindates, setInSetUserCoorindates] = useState<boolean>(false);
     const [currentUnsetImage, setCurrentUnsetImage] = useState<any>();
 
