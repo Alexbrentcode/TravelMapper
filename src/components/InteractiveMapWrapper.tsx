@@ -4,7 +4,9 @@ import { CoordianteInterface, InteractiveMapWrapperInterface } from "../interfac
 import UnsetImangeFooter from "./UnsetImangeFooter";
 import { calculateMidPointOfAllCoordinates, removeItemFromState } from "../helperMethods";
 
-const InteractiveMapWrapper: FC<InteractiveMapWrapperInterface> = ({ imageMetaData, imagesWithoutGPSMetaData, setImageMetaData, setImagesWithoutGPSMetaData }) => {
+const InteractiveMapWrapper: FC<InteractiveMapWrapperInterface> = ({
+    imageMetaData, imagesWithoutGPSMetaData, setImageMetaData, setImagesWithoutGPSMetaData, tripObject, setTripObject
+}) => {
     const initialState = {
         lat: 51.513974,
         lng: -0.030228
@@ -26,6 +28,12 @@ const InteractiveMapWrapper: FC<InteractiveMapWrapperInterface> = ({ imageMetaDa
         }
     }, [imageMetaData])
 
+    useEffect(() => {
+        if (imageMetaData.length > 0) {
+            const sortedData = imageMetaData.sort((a: any, b: any) => a.dateTimeSeconds - b.dateTimeSeconds);
+            setTripObject((prevState: any) => ({ ...prevState, tripImages: sortedData }))
+        }
+    }, [imageMetaData])
 
     useEffect(() => {
         if (userSetCoordinates && currentUnsetImage) {
@@ -33,12 +41,11 @@ const InteractiveMapWrapper: FC<InteractiveMapWrapperInterface> = ({ imageMetaDa
             console.log(userSetCoordinates)
             setImageMetaData((prevState: any) => [...prevState, {
                 imageUrl: imagesWithoutGPSMetaData[currentUnsetImage.imageIdx].imageUrl, imageName: imagesWithoutGPSMetaData[currentUnsetImage.imageIdx].imageName,
-                latitude: userSetCoordinates!.lat, longitude: userSetCoordinates!.lng,
+                lat: userSetCoordinates!.lat, lng: userSetCoordinates!.lng,
                 orientation: "", dateTime: ""
             }]);
             //Remove that item from state
             removeItemFromState(setImagesWithoutGPSMetaData, imagesWithoutGPSMetaData, currentUnsetImage.imageName)
-
         }
     }, [userSetCoordinates])
 

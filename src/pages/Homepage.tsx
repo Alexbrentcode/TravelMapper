@@ -1,11 +1,14 @@
 import { useState } from "react";
-import { TripImageObject } from "../interfaces/SharedInterfaces"
+import { TripImageObject, TripObject } from "../interfaces/SharedInterfaces"
 import ImageUpload from "../components/ImageUpload";
 import InteractiveMapWrapper from "../components/InteractiveMapWrapper";
+import MapObjectContaienr from "../components/MapObjectContaienr";
+import { initialState } from "../helperMethods";
 
 const Homepage = () => {
     const [imageMetaData, setImageMetaData] = useState<TripImageObject[]>([]);
     const [imagesWithoutGPSMetaData, setImagesWithoutGPSMetaData] = useState<any[]>([]);
+    const [tripObject, setTripObject] = useState<TripObject>(initialState);
 
     return (
         <>
@@ -14,6 +17,12 @@ const Homepage = () => {
                     <ImageUpload
                         setImageMetaData={setImageMetaData}
                         setImagesWithoutGPSMetaData={setImagesWithoutGPSMetaData}
+                        setTripObject={setTripObject}
+                    />
+                )}
+                {tripObject?.tripImages?.length && (
+                    <MapObjectContaienr
+                        tripObject={tripObject}
                     />
                 )}
                 <InteractiveMapWrapper
@@ -21,6 +30,9 @@ const Homepage = () => {
                     setImageMetaData={setImageMetaData}
                     imagesWithoutGPSMetaData={imagesWithoutGPSMetaData}
                     setImagesWithoutGPSMetaData={setImagesWithoutGPSMetaData}
+                    tripObject={tripObject}
+                    setTripObject={setTripObject}
+
                 />
             </div >
         </>

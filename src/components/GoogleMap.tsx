@@ -5,7 +5,6 @@ import { getGeoCodeByCoordinates, getGeoCodeByString } from "../api/Geocode/Geoc
 import { formatDateDDMMYYYYHHMM, getDateBySecondsSinceEpoch } from "../helperMethods";
 
 const GoogleMap: FC<GoogleMapInterface> = ({ centralPosition, allMetaData, setUserSetCoordinates }) => {
-
   const [modalOpen, setModalOpen] = useState<boolean>(false);
   const [currentImage, setCurrentImage] = useState<TripImageObject>();
   const [currentLocation, setCurrentLocation] = useState<any>('');
@@ -36,11 +35,11 @@ const GoogleMap: FC<GoogleMapInterface> = ({ centralPosition, allMetaData, setUs
         url: uploadedImage.imageUrl,
         scaledSize: new google.maps.Size(75, 75)
       }
-      processedCoordinatesForLineDrawing.push(new google.maps.LatLng(uploadedImage.latitude, uploadedImage.longitude))
+      processedCoordinatesForLineDrawing.push(new google.maps.LatLng(uploadedImage.lat, uploadedImage.lng))
 
       const customImageMarker = new google.maps.Marker({
         map: map,
-        position: { lat: uploadedImage.latitude, lng: uploadedImage.longitude },
+        position: { lat: uploadedImage.lat, lng: uploadedImage.lng },
         title: uploadedImage.imageName,
         icon: icon
       })
@@ -80,6 +79,7 @@ const GoogleMap: FC<GoogleMapInterface> = ({ centralPosition, allMetaData, setUs
   }, [centralPosition]);
 
   const fetchLocationDisplayName = async () => {
+    console.log(`Current img lag ${JSON.stringify(currentImage)} ${currentImage!.lng}`)
     const res = await getGeoCodeByCoordinates(currentImage!.lat, currentImage!.lng)
     setCurrentLocation(res.display_name);
   }
