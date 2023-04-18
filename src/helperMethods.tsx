@@ -1,4 +1,5 @@
 import * as dayjs from 'dayjs'
+import { TripObject } from './interfaces/SharedInterfaces';
 dayjs().format()
 
 export const formatDateDDMMYYYYHHMM = (date: Date) => {
@@ -25,10 +26,26 @@ export const calculateMidPointOfAllCoordinates = (imageMetaData: any) => {
     let [latitudeMean, longitudeMean] = [0, 0];
 
     imageMetaData.forEach((imageCoord: any) => {
-        isNaN(imageCoord.latitude) ? latitudeCount-- : latitudeMean += imageCoord.latitude
-        isNaN(imageCoord.longitude) ? longitudeCount-- : longitudeMean += imageCoord.longitude
+        isNaN(imageCoord.lat) ? latitudeCount-- : latitudeMean += imageCoord.lat
+        isNaN(imageCoord.lng) ? longitudeCount-- : longitudeMean += imageCoord.lng
     })
 
     //Return to 15th decimal as it's the max degree of accuracy recorded in coordiantes
     return { meanLat: Number((latitudeMean / latitudeCount).toFixed(15)), meanLng: Number((longitudeMean / longitudeCount).toFixed(15)) }
+}
+
+export const initialState: TripObject = {
+    tripStartObj: {
+        locationName: "",
+        locationAddress: "",
+        lat: "",
+        lng: ""
+    },
+    tripEndObj: {
+        locationName: "",
+        locationAddress: "",
+        lat: "",
+        lng: ""
+    },
+    tripImages: []
 }
