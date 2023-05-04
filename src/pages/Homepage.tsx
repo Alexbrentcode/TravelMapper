@@ -4,6 +4,7 @@ import ImageUpload from "../components/ImageUpload";
 import InteractiveMapWrapper from "../components/InteractiveMapWrapper";
 import MapObjectContaienr from "../components/MapObjectContaienr";
 import { initialState } from "../helperMethods";
+import { MapPageContainer } from "../styles/StyledComponents";
 
 const Homepage = () => {
     const [imageMetaData, setImageMetaData] = useState<TripImageObject[]>([]);
@@ -12,7 +13,7 @@ const Homepage = () => {
 
     return (
         <>
-            <div style={{ height: '100%', width: '100%', display: 'flex', justifyContent: 'end' }}>
+            <MapPageContainer>
                 {imageMetaData.length === 0 && (
                     <ImageUpload
                         setImageMetaData={setImageMetaData}
@@ -34,7 +35,7 @@ const Homepage = () => {
                     setTripObject={setTripObject}
 
                 />
-            </div >
+            </MapPageContainer >
         </>
     )
 }

@@ -3,8 +3,16 @@ import exifr from "exifr";
 import { ImageUploadInterface, LocationDataObject, TripObject } from "../interfaces/SharedInterfaces";
 import { getGeoCodeByString } from "../api/Geocode/GeocodeApi";
 import { getDateBySecondsSinceEpoch, initialState } from "../helperMethods";
+import { SearchButtonCustom, SidePanelCustom, TextFieldCustom } from "../styles/StyledComponents";
+import { Search } from "@mui/icons-material";
+import { TextField } from "@mui/material";
+import styled from 'styled-components'
 
+const SidePanelContentContainer = styled.div`
+
+`
 const ImageUpload: FC<ImageUploadInterface> = ({ setImageMetaData, setImagesWithoutGPSMetaData, setTripObject }) => {
+
     const [locationData, setLocationData] = useState<TripObject>(initialState);
     const [locationQueryResponse, setLocationQueryResponse] = useState<TripObject>();
     // Reset current state to avoid duplicating items in state
@@ -60,24 +68,29 @@ const ImageUpload: FC<ImageUploadInterface> = ({ setImageMetaData, setImagesWith
                     dateTimeSeconds: getDateBySecondsSinceEpoch(new Date(testAllData.DateTimeOriginal))
                 }]);
             } else {
-                setImagesWithoutGPSMetaData((prevState: any) => [...prevState, { imageUrl: fileUrl, imageName: thisImage.name, imgObj: thisImage, dateTime: new Date(0) }])
+                setImagesWithoutGPSMetaData((prevState: any) => [...prevState, {
+                    imageUrl: fileUrl, imageName: thisImage.name,
+                    imgObj: thisImage, dateTime: new Date(0)
+                }])
             }
         }
     }
     return (
         <>
-            <div style={{
-                border: '1px solid red', width: 480, height: '100%', flexDirection: 'column', display: 'flex',
-                alignItems: 'center', justifyContent: 'center', position: 'absolute', zIndex: 5, backgroundColor: 'white'
-            }}>
-                <h1>Travel Mapper</h1>
+            <SidePanelCustom>
+  
+                <h1>Lets get started!</h1>
+                <div style={{border: '1px solid black'}}>
                 <h2>Where did your trip begin?</h2>
-                <br />
+
                 <div
-                    style={{ display: 'flex', width: 'mxa-content' }}
+                    style={{ display: 'flex', width: 'max-content' }}
                 >
-                    <input type='text' placeholder="Enter a location" onChange={(e: any) => setLocationData((prevState: any) => ({ ...prevState, tripStartObj: ({ locationName: e.target.value }) }))} />
-                    <button onClick={fetchStartLocationData}>Go</button>
+                    <TextFieldCustom id="standard-basic" label="Start Location" variant="standard" placeholder="Enter a location" onChange={(e: any) => setLocationData((prevState: any) => ({ ...prevState, tripStartObj: ({ locationName: e.target.value }) }))} />
+                    <SearchButtonCustom
+                        startIcon={<Search/>}
+                        onClick={fetchStartLocationData} 
+                    />
                 </div>
                 {locationQueryResponse && locationQueryResponse.tripStartObj.locationAddress.length > 0 && (
                     <p>{locationQueryResponse.tripStartObj.locationAddress}</p>
@@ -87,12 +100,15 @@ const ImageUpload: FC<ImageUploadInterface> = ({ setImageMetaData, setImagesWith
                 <div
                     style={{ display: 'flex', width: 'mxa-content' }}
                 >
-                    <input type='text' placeholder="Enter a location" onChange={(e: any) => setLocationData((prevState: any) => ({ ...prevState, tripEndObj: ({ locationName: e.target.value }) }))} />
-                    <button onClick={fetchEndLocationData}>Go</button>
-                </div>
-                <br />
-                < input type='file' name='imageTest' multiple={true} onChange={(e) => { processImage(e) }} />
-            </div >
+                    <TextFieldCustom id="standard-basic" label="End Location" variant="standard" placeholder="Enter a location"  onChange={(e: any) => setLocationData((prevState: any) => ({ ...prevState, tripEndObj: ({ locationName: e.target.value }) }))} />
+                    <SearchButtonCustom
+                        startIcon={<Search/>}
+                        onClick={fetchEndLocationData}
+                    />
+                    </div>
+                    < input type='file' name='imageTest' multiple={true} onChange={(e) => { processImage(e) }} />
+                           </div>
+            </SidePanelCustom >
         </>
 
     )
