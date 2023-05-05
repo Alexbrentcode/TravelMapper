@@ -56,12 +56,12 @@ const InteractiveMapWrapper: FC<InteractiveMapWrapperInterface> = ({
                 allMetaData={imageMetaData}
                 setUserSetCoordinates={setUserSetCoordinates}
             />
-            {imagesWithoutGPSMetaData.length > 0 && (
+            {/* {imagesWithoutGPSMetaData.length > 0 && (
                 <UnsetImangeFooter
                     unsetImages={imagesWithoutGPSMetaData}
                     setCurrentUnsetImage={setCurrentUnsetImage}
                 />
-            )}
+            )} */}
         </>
     )
 }
