@@ -31,7 +31,7 @@ const InteractiveMapWrapper: FC<InteractiveMapWrapperInterface> = ({
     useEffect(() => {
         if (imageMetaData.length > 0) {
             const sortedData = imageMetaData.sort((a: any, b: any) => a.dateTimeSeconds - b.dateTimeSeconds);
-            setTripObject((prevState: any) => ({ ...prevState, tripImages: sortedData }))
+            //setTripObject((prevState: any) => ({ ...prevState, tripImages: sortedData }))
         }
     }, [imageMetaData])
 

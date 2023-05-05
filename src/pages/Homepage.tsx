@@ -21,9 +21,11 @@ const Homepage = () => {
                         setTripObject={setTripObject}
                     />
                 )}
-                {tripObject?.tripImages?.length && (
+                {imageMetaData.length > 0 && (
                     <MapObjectContaienr
                         tripObject={tripObject}
+                        setImageMetaData={setImageMetaData}
+                        imageMetaData={imageMetaData}
                     />
                 )}
                 <InteractiveMapWrapper

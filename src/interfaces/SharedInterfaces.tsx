@@ -12,6 +12,7 @@ export interface TripImageObject extends CoordianteInterface {
     orientation?: string,
     dateTime?: any,
     dateTimeSeconds?: any
+    id: any;
 }
 
 export interface ImageWithNoGpsMetaDataInterface {
@@ -62,4 +63,6 @@ export interface UnsetImangeFooterInterface {
 
 export interface MapObjectContainerInterface {
     tripObject: TripObject;
+    setImageMetaData: (value: any) => void;
+    imageMetaData: TripImageObject[];
 }

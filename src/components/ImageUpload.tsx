@@ -65,7 +65,8 @@ const ImageUpload: FC<ImageUploadInterface> = ({ setImageMetaData, setImagesWith
                 setImageMetaData((prevState: any) => [...prevState, {
                     imageUrl: fileUrl, imageName: thisImage.name, lat: latitude, lng: longitude,
                     orientation: testAllData.Orientation, dateTime: testAllData.DateTimeOriginal,
-                    dateTimeSeconds: getDateBySecondsSinceEpoch(new Date(testAllData.DateTimeOriginal))
+                    dateTimeSeconds: getDateBySecondsSinceEpoch(new Date(testAllData.DateTimeOriginal)),
+                    id: crypto.randomUUID()
                 }]);
             } else {
                 setImagesWithoutGPSMetaData((prevState: any) => [...prevState, {
