@@ -32,3 +32,17 @@ export const TextFieldCustom = styled.div`
     height: 50px;
     width: 200px;
 `;
+
+/**
+ * Components
+ */
+
+export const ImageCard = styled.div`
+    display: flex;
+    margin-bottom: 8px;
+    box-sizing: border-box;
+    border: 1px solid #ced4da;
+    background-color: white;
+    border-radius: 8px;
+    width: 100%;
+`;

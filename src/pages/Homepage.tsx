@@ -9,10 +9,11 @@ import { MapPageContainer } from "../styles/StyledComponents";
 const Homepage = () => {
     const [imageMetaData, setImageMetaData] = useState<TripImageObject[]>([]);
     const [imagesWithoutGPSMetaData, setImagesWithoutGPSMetaData] = useState<
-        any[]
+        TripImageObject[]
     >([]);
     const [tripObject, setTripObject] = useState<TripObject>(initialState);
-    const [imageUploadComplete, setImageUploadComplete] = useState<boolean>(false);
+    const [imageUploadComplete, setImageUploadComplete] =
+        useState<boolean>(false);
 
     return (
         <>
@@ -32,6 +33,10 @@ const Homepage = () => {
                         tripObject={tripObject}
                         imageMetaData={imageMetaData}
                         setImageMetaData={setImageMetaData}
+                        imagesWithoutGPSMetaData={imagesWithoutGPSMetaData}
+                        setImagesWithoutGPSMetaData={
+                            setImagesWithoutGPSMetaData
+                        }
                     />
                 )}
                 <InteractiveMapWrapper

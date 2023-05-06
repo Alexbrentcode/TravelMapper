@@ -15,12 +15,6 @@ export interface TripImageObject extends CoordianteInterface {
     dateTimeSeconds?: any;
 }
 
-export interface ImageWithNoGpsMetaDataInterface {
-    imageUrl: string;
-    imageName: string;
-    imgObj: any;
-}
-
 export interface TripObject {
     tripStartObj: LocationDataObject;
     tripEndObj: LocationDataObject;
@@ -50,7 +44,7 @@ export interface GoogleMapInterface {
 
 export interface InteractiveMapWrapperInterface {
     imageMetaData: TripImageObject[];
-    imagesWithoutGPSMetaData: ImageWithNoGpsMetaDataInterface[];
+    imagesWithoutGPSMetaData: TripImageObject[];
     setImageMetaData: (value: any) => void;
     setImagesWithoutGPSMetaData: (value: any) => void;
     tripObject: any;
@@ -58,7 +52,7 @@ export interface InteractiveMapWrapperInterface {
 }
 
 export interface UnsetImangeFooterInterface {
-    unsetImages: ImageWithNoGpsMetaDataInterface[];
+    unsetImages: TripImageObject[];
     setCurrentUnsetImage: (value: any) => void;
 }
 
@@ -66,4 +60,6 @@ export interface MapObjectContainerInterface {
     tripObject: TripObject;
     setImageMetaData: (value: any) => void;
     imageMetaData: TripImageObject[];
+    setImagesWithoutGPSMetaData: (value: any) => void;
+    imagesWithoutGPSMetaData: TripImageObject[];
 }

@@ -115,8 +115,10 @@ const ImageUpload: FC<ImageUploadInterface> = ({
                     {
                         imageUrl: fileUrl,
                         imageName: thisImage.name,
-                        imgObj: thisImage,
-                        dateTime: new Date(0)
+                        dateTime: new Date(0),
+                        imageId: crypto.randomUUID(),
+                        lat: null,
+                        lng: null
                     }
                 ]);
             }

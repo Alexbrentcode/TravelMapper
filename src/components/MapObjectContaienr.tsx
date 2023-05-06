@@ -1,4 +1,4 @@
-import { FC } from "react";
+import { FC, useState } from "react";
 import {
     MapObjectContainerInterface,
     TripImageObject
@@ -13,24 +13,20 @@ import { useListState } from "@mantine/hooks";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import styled from "@emotion/styled";
 import { Edit } from "tabler-icons-react";
-import { formatDateDDMMYYYYHHMM } from "../helperMethods";
-
-const ImageCard = styled.div`
-    display: flex;
-    margin-bottom: 8px;
-    box-sizing: border-box;
-    border: 1px solid #ced4da;
-    background-color: white;
-    border-radius: 8px;
-    width: 100%;
-`;
+import { dragAndDropComponent, formatDateDDMMYYYYHHMM } from "../helperMethods";
+import UnsetImangeFooter from "./UnsetImangeFooter";
+import { ImageCard } from "../styles/StyledComponents";
+import ImageListObject from "./ImageListObject";
 
 const MapObjectContaienr: FC<MapObjectContainerInterface> = ({
     tripObject,
     imageMetaData,
-    setImageMetaData
+    setImageMetaData,
+    setImagesWithoutGPSMetaData,
+    imagesWithoutGPSMetaData
 }) => {
     console.log(imageMetaData);
+    const [currentUnsetImage, setCurrentUnsetImage] = useState<any>();
 
     // const useStyles = createStyles((theme) => ({
     //     item: {
@@ -49,99 +45,6 @@ const MapObjectContaienr: FC<MapObjectContainerInterface> = ({
     //         boxShadow: theme.shadows.sm
     //     }
     // }));
-
-    const DndList = (data: TripImageObject[]) => {
-        //const { classes, cx } = useStyles();
-        const [state, handlers] = useListState(data);
-        const items = state.map((item: any, index: number) => (
-            <Draggable
-                key={item.imageId}
-                index={index}
-                draggableId={item.imageId}
-            >
-                {(provided, snapshot) => (
-                    <ImageCard
-                        {...provided.draggableProps}
-                        {...provided.dragHandleProps}
-                        ref={provided.innerRef}
-                    >
-                        {/* <Button
-                            style={{ height: "max-content", width: "45px" }}
-                            leftIcon={<Edit />}
-                        ></Button> */}
-                        <div
-                            style={{
-                                position: "relative",
-                                display: "flex",
-                                height: "100px",
-                                boxSizing: "border-box",
-                                padding: "8px"
-                            }}
-                        >
-                            <img
-                                src={item.imageUrl}
-                                style={{
-                                    display: "block",
-                                    position: "relative",
-                                    width: "30%",
-                                    marginRight: 8
-                                }}
-                            />
-                            <div
-                                style={{
-                                    display: "flex",
-                                    position: "relative",
-                                    boxSizing: "border-box",
-                                    width: "100%",
-                                    height: "100%",
-                                    flexDirection: "column",
-                                    justifyContent: "space-around",
-                                    userSelect: "none"
-                                }}
-                            >
-                                <h3 style={{ padding: 0, margin: 0 }}>
-                                    {item.imageName}
-                                </h3>
-                                <h4
-                                    style={{
-                                        padding: 0,
-                                        margin: 0,
-                                        fontWeight: 400,
-                                        color: "#868e96"
-                                    }}
-                                >
-                                    {formatDateDDMMYYYYHHMM(item.dateTime)}
-                                </h4>
-                            </div>
-                        </div>
-                    </ImageCard>
-                )}
-            </Draggable>
-        ));
-
-        return (
-            <DragDropContext
-                onDragEnd={({ destination, source }) =>
-                    handlers.reorder({
-                        from: source.index,
-                        to: destination?.index || 0
-                    })
-                }
-            >
-                <Droppable droppableId="dnd-list" direction="vertical">
-                    {(provided) => (
-                        <div
-                            {...provided.droppableProps}
-                            ref={provided.innerRef}
-                        >
-                            {items}
-                            {provided.placeholder}
-                        </div>
-                    )}
-                </Droppable>
-            </DragDropContext>
-        );
-    };
 
     const testData: TripImageObject[] = [
         {
@@ -237,7 +140,7 @@ const MapObjectContaienr: FC<MapObjectContainerInterface> = ({
                 "blob:http://localhost:5173/d237938b-5238-48a6-ae3f-be69a1331e13",
             imageName: "IMG_0946.jpg",
             lat: 54.48933888888889,
-            lng: -3.203613888888889,
+            lng: null,
             orientation: "Rotate 90 CW",
             dateTime: "2023-04-01T10:47:23.000Z",
             dateTimeSeconds: 1680346043000,
@@ -289,14 +192,28 @@ const MapObjectContaienr: FC<MapObjectContainerInterface> = ({
                 position: "absolute",
                 zIndex: 5,
                 backgroundColor: "white",
-                overflowY: "scroll",
                 boxSizing: "border-box"
             }}
         >
-            <div style={{ position: "relative", height: "15%" }}>
+            <div style={{ position: "relative", height: "10%" }}>
                 <h1> Your Route</h1>
             </div>
-            {DndList(imageMetaData)}
+            <div
+                style={{
+                    position: "relative",
+                    height: "65%",
+                    overflowY: "scroll"
+                }}
+            >
+                {dragAndDropComponent(imageMetaData)}
+            </div>
+
+            {imagesWithoutGPSMetaData.length > 0 && (
+                <UnsetImangeFooter
+                    unsetImages={imagesWithoutGPSMetaData}
+                    setCurrentUnsetImage={setCurrentUnsetImage}
+                />
+            )}
         </div>
     );
 };
