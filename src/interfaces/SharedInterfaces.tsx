@@ -2,22 +2,23 @@
  * OBJECT INTERFACES
  */
 export interface CoordianteInterface {
-    lat: any,
-    lng: any
+    lat: any;
+    lng: any;
 }
 
 export interface TripImageObject extends CoordianteInterface {
-    imageUrl: string,
-    imageName: string,
-    orientation?: string,
-    dateTime?: any,
-    dateTimeSeconds?: any
+    imageUrl: string;
+    imageName: string;
+    imageId: string;
+    orientation?: string;
+    dateTime?: any;
+    dateTimeSeconds?: any;
 }
 
 export interface ImageWithNoGpsMetaDataInterface {
-    imageUrl: string,
-    imageName: string,
-    imgObj: any
+    imageUrl: string;
+    imageName: string;
+    imgObj: any;
 }
 
 export interface TripObject {
@@ -56,10 +57,12 @@ export interface InteractiveMapWrapperInterface {
 }
 
 export interface UnsetImangeFooterInterface {
-    unsetImages: ImageWithNoGpsMetaDataInterface[],
+    unsetImages: ImageWithNoGpsMetaDataInterface[];
     setCurrentUnsetImage: (value: any) => void;
 }
 
 export interface MapObjectContainerInterface {
     tripObject: TripObject;
+    setImageMetaData: (value: any) => void;
+    imageMetaData: TripImageObject[];
 }

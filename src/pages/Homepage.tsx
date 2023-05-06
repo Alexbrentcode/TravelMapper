@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { TripImageObject, TripObject } from "../interfaces/SharedInterfaces"
+import { TripImageObject, TripObject } from "../interfaces/SharedInterfaces";
 import ImageUpload from "../components/ImageUpload";
 import InteractiveMapWrapper from "../components/InteractiveMapWrapper";
 import MapObjectContaienr from "../components/MapObjectContaienr";
@@ -8,7 +8,9 @@ import { MapPageContainer } from "../styles/StyledComponents";
 
 const Homepage = () => {
     const [imageMetaData, setImageMetaData] = useState<TripImageObject[]>([]);
-    const [imagesWithoutGPSMetaData, setImagesWithoutGPSMetaData] = useState<any[]>([]);
+    const [imagesWithoutGPSMetaData, setImagesWithoutGPSMetaData] = useState<
+        any[]
+    >([]);
     const [tripObject, setTripObject] = useState<TripObject>(initialState);
 
     return (
@@ -17,13 +19,17 @@ const Homepage = () => {
                 {imageMetaData.length === 0 && (
                     <ImageUpload
                         setImageMetaData={setImageMetaData}
-                        setImagesWithoutGPSMetaData={setImagesWithoutGPSMetaData}
+                        setImagesWithoutGPSMetaData={
+                            setImagesWithoutGPSMetaData
+                        }
                         setTripObject={setTripObject}
                     />
                 )}
-                {tripObject?.tripImages?.length && (
+                {imageMetaData.length > 5 && (
                     <MapObjectContaienr
                         tripObject={tripObject}
+                        imageMetaData={imageMetaData}
+                        setImageMetaData={setImageMetaData}
                     />
                 )}
                 <InteractiveMapWrapper
@@ -33,11 +39,10 @@ const Homepage = () => {
                     setImagesWithoutGPSMetaData={setImagesWithoutGPSMetaData}
                     tripObject={tripObject}
                     setTripObject={setTripObject}
-
                 />
-            </MapPageContainer >
+            </MapPageContainer>
         </>
-    )
-}
+    );
+};
 
-export default Homepage
+export default Homepage;
