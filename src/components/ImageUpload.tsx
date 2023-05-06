@@ -12,15 +12,13 @@ import {
     SidePanelCustom,
     TextFieldCustom
 } from "../styles/StyledComponents";
-import { Search } from "@mui/icons-material";
-import { TextField } from "@mui/material";
-import styled from "styled-components";
+import styled from "@emotion/styled";
 
-const SidePanelContentContainer = styled.div``;
 const ImageUpload: FC<ImageUploadInterface> = ({
     setImageMetaData,
     setImagesWithoutGPSMetaData,
-    setTripObject
+    setTripObject,
+    setImageUploadComplete
 }) => {
     const [locationData, setLocationData] = useState<TripObject>(initialState);
     const [locationQueryResponse, setLocationQueryResponse] =
@@ -123,6 +121,7 @@ const ImageUpload: FC<ImageUploadInterface> = ({
                 ]);
             }
         }
+        setImageUploadComplete(true);
     };
     return (
         <>
@@ -134,8 +133,6 @@ const ImageUpload: FC<ImageUploadInterface> = ({
                     <div style={{ display: "flex", width: "max-content" }}>
                         <TextFieldCustom
                             id="standard-basic"
-                            label="Start Location"
-                            variant="standard"
                             placeholder="Enter a location"
                             onChange={(e: any) =>
                                 setLocationData((prevState: any) => ({
@@ -146,10 +143,7 @@ const ImageUpload: FC<ImageUploadInterface> = ({
                                 }))
                             }
                         />
-                        <SearchButtonCustom
-                            startIcon={<Search />}
-                            onClick={fetchStartLocationData}
-                        />
+                        <SearchButtonCustom onClick={fetchStartLocationData} />
                     </div>
                     {locationQueryResponse &&
                         locationQueryResponse.tripStartObj.locationAddress
@@ -166,8 +160,6 @@ const ImageUpload: FC<ImageUploadInterface> = ({
                     <div style={{ display: "flex", width: "mxa-content" }}>
                         <TextFieldCustom
                             id="standard-basic"
-                            label="End Location"
-                            variant="standard"
                             placeholder="Enter a location"
                             onChange={(e: any) =>
                                 setLocationData((prevState: any) => ({
@@ -176,10 +168,7 @@ const ImageUpload: FC<ImageUploadInterface> = ({
                                 }))
                             }
                         />
-                        <SearchButtonCustom
-                            startIcon={<Search />}
-                            onClick={fetchEndLocationData}
-                        />
+                        <SearchButtonCustom onClick={fetchEndLocationData} />
                     </div>
                     <input
                         type="file"

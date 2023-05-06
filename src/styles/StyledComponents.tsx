@@ -1,6 +1,4 @@
-import { Button, TextField } from "@mui/material";
-import styled from 'styled-components'
-
+import styled from "@emotion/styled";
 /**
  * Containers
  */
@@ -10,7 +8,7 @@ export const MapPageContainer = styled.div`
     width: 100%;
     display: flex;
     justify-content: end;
-`
+`;
 
 export const SidePanelCustom = styled.div`
     width: 480px;
@@ -22,16 +20,15 @@ export const SidePanelCustom = styled.div`
     position: absolute;
     z-index: 5;
     background-color: white;
-`
+`;
 
-export const SearchButtonCustom = styled(Button)`
+export const SearchButtonCustom = styled.button`
     height: 50px;
     width: 50px;
-    background-color: #EEEEEE;
-`
+    background-color: #eeeeee;
+`;
 
-export const TextFieldCustom = styled(TextField)`
+export const TextFieldCustom = styled.div`
     height: 50px;
     width: 200px;
-`
-
+`;

@@ -39,6 +39,7 @@ export interface ImageUploadInterface {
     setImageMetaData: (value: any) => void;
     setImagesWithoutGPSMetaData: (value: any) => void;
     setTripObject: (value: any) => void;
+    setImageUploadComplete: (value: any) => void;
 }
 
 export interface GoogleMapInterface {

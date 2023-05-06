@@ -12,6 +12,7 @@ const Homepage = () => {
         any[]
     >([]);
     const [tripObject, setTripObject] = useState<TripObject>(initialState);
+    const [imageUploadComplete, setImageUploadComplete] = useState<boolean>(false);
 
     return (
         <>
@@ -23,9 +24,10 @@ const Homepage = () => {
                             setImagesWithoutGPSMetaData
                         }
                         setTripObject={setTripObject}
+                        setImageUploadComplete={setImageUploadComplete}
                     />
                 )}
-                {imageMetaData.length > 5 && (
+                {imageUploadComplete && (
                     <MapObjectContaienr
                         tripObject={tripObject}
                         imageMetaData={imageMetaData}
