@@ -20,7 +20,7 @@ const MapObjectContaienr: FC<MapObjectContainerInterface> = ({
                 position: "absolute",
                 zIndex: 5,
                 backgroundColor: "white",
-                overflowY: "scroll"
+                //overflowY: "scroll"
             }}
         >
             <div style={{ position: "relative", height: "15%" }}>
@@ -28,11 +28,11 @@ const MapObjectContaienr: FC<MapObjectContainerInterface> = ({
             </div>
             {imageMetaData && (
                 <Reorder.Group
-                    layoutScroll
+                    // layoutScroll
                     axis="y"
                     onReorder={setImageMetaData}
                     values={imageMetaData}
-                    as="ul"
+                    as="div"
                 >
                     {imageMetaData.map((item: any, index: number) => (
                         <Item key={item.id} item={item} />

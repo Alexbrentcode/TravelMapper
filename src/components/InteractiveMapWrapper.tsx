@@ -31,7 +31,7 @@ const InteractiveMapWrapper: FC<InteractiveMapWrapperInterface> = ({
     useEffect(() => {
         if (imageMetaData.length > 0) {
             const sortedData = imageMetaData.sort((a: any, b: any) => a.dateTimeSeconds - b.dateTimeSeconds);
-            //setTripObject((prevState: any) => ({ ...prevState, tripImages: sortedData }))
+            setTripObject((prevState: any) => ({ ...prevState, tripImages: sortedData }))
         }
     }, [imageMetaData])
 
@@ -56,12 +56,12 @@ const InteractiveMapWrapper: FC<InteractiveMapWrapperInterface> = ({
                 allMetaData={imageMetaData}
                 setUserSetCoordinates={setUserSetCoordinates}
             />
-            {/* {imagesWithoutGPSMetaData.length > 0 && (
+            {imagesWithoutGPSMetaData.length > 0 && (
                 <UnsetImangeFooter
                     unsetImages={imagesWithoutGPSMetaData}
                     setCurrentUnsetImage={setCurrentUnsetImage}
                 />
-            )} */}
+            )}
         </>
     )
 }

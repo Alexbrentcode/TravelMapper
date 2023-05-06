@@ -3,20 +3,20 @@ import { useMotionValue, Reorder, useDragControls } from "framer-motion";
 import { useRaisedShadow } from "./use-raised-shadow";
 
 interface Props {
-    item: any;
-    //     id: number;
+    item: {
+        id: string;
+        imageName: string;
+    };
 }
 
 export const Item = ({ item }: Props) => {
     const y = useMotionValue(0);
     const boxShadow = useRaisedShadow(y);
-    console.log(item);
     return (
         <Reorder.Item
-            as="li"
+            as="div"
             value={item}
             id={item.id}
-            key={item.id}
             style={{
                 position: "relative",
                 display: "flex",
