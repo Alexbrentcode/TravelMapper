@@ -1,31 +1,38 @@
 import { FC, useEffect, useState } from "react";
 import exifr from "exifr";
 import {
+    AllUploadedImagesInterface,
     ImageUploadInterface,
     LocationDataObject,
     TripObject
 } from "../interfaces/SharedInterfaces";
 import { getGeoCodeByString } from "../api/Geocode/GeocodeApi";
-import { getDateBySecondsSinceEpoch, initialState } from "../helperMethods";
+import {
+    getDateBySecondsSinceEpoch,
+    initialPhotoState,
+    initialState
+} from "../helperMethods";
 import {
     SearchButtonCustom,
     SidePanelCustom,
     TextFieldCustom
 } from "../styles/StyledComponents";
 import styled from "@emotion/styled";
+import { all } from "axios";
 
 const ImageUpload: FC<ImageUploadInterface> = ({
-    setImageMetaData,
-    setImagesWithoutGPSMetaData,
     setTripObject,
-    setImageUploadComplete
+    setImageUploadComplete,
+    allUploadedImages,
+    setAllUploadedImages
 }) => {
     const [locationData, setLocationData] = useState<TripObject>(initialState);
     const [locationQueryResponse, setLocationQueryResponse] =
         useState<TripObject>();
+
     // Reset current state to avoid duplicating items in state
     const resetUploadedImageState = () => {
-        setImageMetaData([]);
+        setAllUploadedImages(initialPhotoState);
     };
 
     useEffect(() => {
@@ -94,37 +101,43 @@ const ImageUpload: FC<ImageUploadInterface> = ({
             if (await exifr.gps(fileUrl)) {
                 let { latitude, longitude } = await exifr.gps(fileUrl);
                 let testAllData = await exifr.parse(fileUrl);
-                setImageMetaData((prevState: any) => [
+                setAllUploadedImages((prevState: any) => ({
                     ...prevState,
-                    {
-                        imageUrl: fileUrl,
-                        imageName: thisImage.name,
-                        lat: latitude,
-                        lng: longitude,
-                        orientation: testAllData.Orientation,
-                        dateTime: testAllData.DateTimeOriginal,
-                        dateTimeSeconds: getDateBySecondsSinceEpoch(
-                            new Date(testAllData.DateTimeOriginal)
-                        ),
-                        imageId: crypto.randomUUID()
-                    }
-                ]);
+                    gpsImages: [
+                        ...prevState.gpsImages,
+                        {
+                            imageUrl: fileUrl,
+                            imageName: thisImage.name,
+                            lat: latitude,
+                            lng: longitude,
+                            orientation: testAllData.Orientation,
+                            dateTime: testAllData.DateTimeOriginal,
+                            dateTimeSeconds: getDateBySecondsSinceEpoch(
+                                new Date(testAllData.DateTimeOriginal)
+                            ),
+                            imageId: crypto.randomUUID()
+                        }
+                    ]
+                }));
             } else {
-                setImagesWithoutGPSMetaData((prevState: any) => [
+                setAllUploadedImages((prevState: any) => ({
                     ...prevState,
-                    {
-                        imageUrl: fileUrl,
-                        imageName: thisImage.name,
-                        dateTime: new Date(0),
-                        imageId: crypto.randomUUID(),
-                        lat: null,
-                        lng: null
-                    }
-                ]);
+                    noGpsImages: [
+                        ...prevState.noGpsImages,
+                        {
+                            imageUrl: fileUrl,
+                            imageName: thisImage.name,
+                            lat: "",
+                            lng: "",
+                            imageId: crypto.randomUUID()
+                        }
+                    ]
+                }));
             }
         }
         setImageUploadComplete(true);
     };
+
     return (
         <>
             <SidePanelCustom>

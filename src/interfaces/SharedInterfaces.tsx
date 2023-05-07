@@ -26,40 +26,41 @@ export interface LocationDataObject extends CoordianteInterface {
     locationAddress: string;
 }
 
+export interface AllUploadedImagesInterface {
+    gpsImages?: TripImageObject[];
+    noGpsImages?: TripImageObject[];
+}
+
 /**
  * COMPONENT INTERFACES
  */
 export interface ImageUploadInterface {
-    setImageMetaData: (value: any) => void;
-    setImagesWithoutGPSMetaData: (value: any) => void;
     setTripObject: (value: any) => void;
     setImageUploadComplete: (value: any) => void;
+    allUploadedImages: AllUploadedImagesInterface;
+    setAllUploadedImages: (value: any) => void;
 }
 
 export interface GoogleMapInterface {
+    allUploadedImages: AllUploadedImagesInterface;
     centralPosition: any;
-    allMetaData: TripImageObject[];
     setUserSetCoordinates: any;
 }
 
 export interface InteractiveMapWrapperInterface {
-    imageMetaData: TripImageObject[];
-    imagesWithoutGPSMetaData: TripImageObject[];
-    setImageMetaData: (value: any) => void;
-    setImagesWithoutGPSMetaData: (value: any) => void;
+    allUploadedImages: AllUploadedImagesInterface;
+    setAllUploadedImages: (value: any) => void;
     tripObject: any;
     setTripObject: (value: any) => void;
 }
 
 export interface UnsetImangeFooterInterface {
-    unsetImages: TripImageObject[];
-    setCurrentUnsetImage: (value: any) => void;
+    allUploadedImages: AllUploadedImagesInterface;
+    setAllUploadedImages: (value: any) => void;
 }
 
 export interface MapObjectContainerInterface {
     tripObject: TripObject;
-    setImageMetaData: (value: any) => void;
-    imageMetaData: TripImageObject[];
-    setImagesWithoutGPSMetaData: (value: any) => void;
-    imagesWithoutGPSMetaData: TripImageObject[];
+    allUploadedImages: AllUploadedImagesInterface;
+    setAllUploadedImages: (value: any) => void;
 }

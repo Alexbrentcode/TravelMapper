@@ -1,8 +1,13 @@
 import * as dayjs from "dayjs";
-import { TripImageObject, TripObject } from "./interfaces/SharedInterfaces";
+import {
+    AllUploadedImagesInterface,
+    TripImageObject,
+    TripObject
+} from "./interfaces/SharedInterfaces";
 import { useListState } from "@mantine/hooks";
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 import ImageListObject from "./components/ImageListObject";
+import { useEffect, useState } from "react";
 dayjs().format();
 
 export const formatDateDDMMYYYYHHMM = (date: Date) => {
@@ -59,53 +64,158 @@ export const initialState: TripObject = {
     },
     tripImages: []
 };
+export const initialPhotoState: AllUploadedImagesInterface = {
+    gpsImages: [],
+    noGpsImages: []
+};
 
-export const dragAndDropComponent = (data: TripImageObject[]) => {
-    //const { classes, cx } = useStyles();
-    const [state, handlers] = useListState(data);
-    const items = state.map((item: any, index: number) => (
-        <Draggable
-            key={item.imageId}
-            index={index}
-            draggableId={item.imageId}
-            // isDragDisabled={index === 0}
-        >
-            {(provided, snapshot) => (
-                <div
-                    {...provided.draggableProps}
-                    {...provided.dragHandleProps}
-                    ref={provided.innerRef}
-                >
-                    <ImageListObject item={item} />
-                </div>
-            )}
-        </Draggable>
-    ));
-
-    return (
-        <DragDropContext
-            onDragEnd={
-                ({ destination, source }) =>
-                    console.log(
-                        `Destination ${JSON.stringify(
-                            destination
-                        )} source ${JSON.stringify(source)}`
-                    )
-
-                // handlers.reorder({
-                //     from: source.index,
-                //     to: destination?.index || 0
-                // })
-            }
-        >
-            <Droppable droppableId="dnd-list" direction="vertical">
-                {(provided) => (
-                    <div {...provided.droppableProps} ref={provided.innerRef}>
-                        {items}
-                        {provided.placeholder}
+export const dragAndDropComponent = (
+    allUploadedImages: AllUploadedImagesInterface,
+    setAllUploadedImages: (value: any) => void
+) => {
+    const setDroppableId = "set-images-dnd";
+    const unsetDroppableId = "unset-images-dnd";
+    // const [allImageState, setAllImageState] =
+    //     useState<AllUploadedImagesInterface>(allUploadedImages);
+    // const [unsetImagesState, moreHandlers] = useListState(unsetImages);
+    const setItems = allUploadedImages.gpsImages!.map(
+        (item: any, index: number) => (
+            <Draggable
+                key={item.imageId}
+                index={index}
+                draggableId={item.imageId}
+                // isDragDisabled={index === 0}
+            >
+                {(provided, snapshot) => (
+                    <div
+                        {...provided.draggableProps}
+                        {...provided.dragHandleProps}
+                        ref={provided.innerRef}
+                    >
+                        <ImageListObject item={item} />
                     </div>
                 )}
-            </Droppable>
-        </DragDropContext>
+            </Draggable>
+        )
+    );
+
+    const unsetItems = allUploadedImages.noGpsImages!.map(
+        (item: any, index: number) => (
+            <Draggable
+                key={item.imageId}
+                index={index}
+                draggableId={item.imageId}
+                // isDragDisabled={index === 0}
+            >
+                {(provided, snapshot) => (
+                    <div
+                        {...provided.draggableProps}
+                        {...provided.dragHandleProps}
+                        ref={provided.innerRef}
+                    >
+                        <ImageListObject item={item} />
+                    </div>
+                )}
+            </Draggable>
+        )
+    );
+
+    const handleDragAndDrop = (destination: any, source: any) => {
+        if (!destination.droppableId) {
+            return;
+        }
+        if (
+            source.droppableId === setDroppableId &&
+            destination.droppableId === setDroppableId
+        ) {
+            const copiedSetImages = [...allUploadedImages.gpsImages!];
+            const [removedSetImage] = copiedSetImages.splice(source.index, 1);
+            copiedSetImages.splice(destination.index, 0, removedSetImage);
+            setAllUploadedImages((prevState: any) => ({
+                ...prevState,
+                gpsImages: copiedSetImages
+            }));
+        } else if (
+            source.droppableId === unsetDroppableId &&
+            destination.droppableId === setDroppableId
+        ) {
+            const copiedUnsetImages = [...allUploadedImages.noGpsImages!];
+            const copiedSetImages = [...allUploadedImages.gpsImages!];
+            console.log(copiedUnsetImages);
+            const [removedUnsetImage] = copiedUnsetImages.splice(
+                source.index,
+                1
+            );
+            copiedSetImages.splice(destination.index, 0, removedUnsetImage);
+            setAllUploadedImages((prevState: any) => ({
+                ...prevState,
+                gpsImages: copiedSetImages,
+                noGpsImages: copiedUnsetImages
+            }));
+        }
+    };
+
+    useEffect(() => {
+        console.log(allUploadedImages);
+    }, [allUploadedImages]);
+
+    return (
+        <>
+            <DragDropContext
+                onDragEnd={({ destination, source }) =>
+                    handleDragAndDrop(destination, source)
+                }
+            >
+                <div
+                    style={{
+                        position: "relative",
+                        height: "auto",
+                        overflowY: "scroll"
+                    }}
+                >
+                    <Droppable
+                        droppableId={setDroppableId}
+                        direction="vertical"
+                    >
+                        {(provided) => (
+                            <div
+                                {...provided.droppableProps}
+                                ref={provided.innerRef}
+                            >
+                                {setItems}
+                                {provided.placeholder}
+                            </div>
+                        )}
+                    </Droppable>
+                </div>
+                {allUploadedImages.noGpsImages!.length > 0 && (
+                    <>
+                        <h4>Unset Images</h4>
+                        <div
+                            style={{
+                                position: "relative",
+                                height: "max-content",
+                                overflowY: "scroll"
+                            }}
+                        >
+                            <Droppable
+                                droppableId={unsetDroppableId}
+                                direction="vertical"
+                            >
+                                {(provided) => (
+                                    <div
+                                        {...provided.droppableProps}
+                                        ref={provided.innerRef}
+                                    >
+                                        {unsetItems}
+                                        {provided.placeholder}
+                                    </div>
+                                )}
+                            </Droppable>
+                        </div>
+                    </>
+                )}
+            </DragDropContext>
+        </>
     );
 };

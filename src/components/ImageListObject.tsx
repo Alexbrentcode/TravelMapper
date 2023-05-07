@@ -67,8 +67,34 @@ const ImageListObject: FC<ImageListObjectInterface> = ({ item }) => {
                                 color: "#868e96"
                             }}
                         >
-                            {/* {formatDateDDMMYYYYHHMM(item.dateTime)} */}
+                            {item.dateTime
+                                ? formatDateDDMMYYYYHHMM(item.dateTime)
+                                : "Please set co-ordinates"}
                         </h4>
+                        {item.lng && (
+                            <h5
+                                style={{
+                                    padding: 0,
+                                    margin: 0,
+                                    fontWeight: 400,
+                                    color: "#868e96"
+                                }}
+                            >
+                                Lat: {item.lat}
+                            </h5>
+                        )}
+                        {item.lat && (
+                            <h5
+                                style={{
+                                    padding: 0,
+                                    margin: 0,
+                                    fontWeight: 400,
+                                    color: "#868e96"
+                                }}
+                            >
+                                Lng: {item.lng}
+                            </h5>
+                        )}
                     </div>
                 </div>
             </ImageListContainer>

@@ -20,32 +20,9 @@ import ImageListObject from "./ImageListObject";
 
 const MapObjectContaienr: FC<MapObjectContainerInterface> = ({
     tripObject,
-    imageMetaData,
-    setImageMetaData,
-    setImagesWithoutGPSMetaData,
-    imagesWithoutGPSMetaData
+    allUploadedImages,
+    setAllUploadedImages
 }) => {
-    console.log(imageMetaData);
-    const [currentUnsetImage, setCurrentUnsetImage] = useState<any>();
-
-    // const useStyles = createStyles((theme) => ({
-    //     item: {
-    //         ...theme.fn.focusStyles(),
-    //         display: "flex",
-    //         alignItems: "center",
-    //         borderRadius: theme.radius.lg,
-    //         border: `${rem(1)} solid ${
-    //             theme.colorScheme === "dark"
-    //                 ? theme.colors.dark[5]
-    //                 : theme.colors.gray[2]
-    //         }`,
-    //         padding: `${theme.spacing.xs} ${theme.spacing.xs}`
-    //     },
-    //     itemDragging: {
-    //         boxShadow: theme.shadows.sm
-    //     }
-    // }));
-
     const testData: TripImageObject[] = [
         {
             imageUrl:
@@ -198,22 +175,8 @@ const MapObjectContaienr: FC<MapObjectContainerInterface> = ({
             <div style={{ position: "relative", height: "10%" }}>
                 <h1> Your Route</h1>
             </div>
-            <div
-                style={{
-                    position: "relative",
-                    height: "65%",
-                    overflowY: "scroll"
-                }}
-            >
-                {dragAndDropComponent(imageMetaData)}
-            </div>
 
-            {imagesWithoutGPSMetaData.length > 0 && (
-                <UnsetImangeFooter
-                    unsetImages={imagesWithoutGPSMetaData}
-                    setCurrentUnsetImage={setCurrentUnsetImage}
-                />
-            )}
+            {dragAndDropComponent(allUploadedImages, setAllUploadedImages)}
         </div>
     );
 };

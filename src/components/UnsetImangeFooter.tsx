@@ -7,8 +7,8 @@ import ImageListObject from "./ImageListObject";
 import { dragAndDropComponent } from "../helperMethods";
 
 const UnsetImangeFooter: FC<UnsetImangeFooterInterface> = ({
-    unsetImages,
-    setCurrentUnsetImage
+    allUploadedImages,
+    setAllUploadedImages
 }) => {
     const testData: TripImageObject[] = [
         {
@@ -58,7 +58,7 @@ const UnsetImangeFooter: FC<UnsetImangeFooterInterface> = ({
                     height: "30vh"
                 }}
             >
-                {dragAndDropComponent(testData)}
+                {/* {dragAndDropComponent(testData)} */}
                 {/* {unsetImages.map((unsetImage: any, idx: number) => {
                     return (
                         <ImageListObject item={unsetImage} />

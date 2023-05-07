@@ -16,7 +16,7 @@ import GoogleMapReact from "google-map-react";
 
 const GoogleMap: FC<GoogleMapInterface> = ({
     centralPosition,
-    allMetaData,
+    allUploadedImages,
     setUserSetCoordinates
 }) => {
     const [modalOpen, setModalOpen] = useState<boolean>(false);
@@ -43,7 +43,7 @@ const GoogleMap: FC<GoogleMapInterface> = ({
         });
 
         //Iterate through iamges and set as markers
-        allMetaData.forEach((uploadedImage: any) => {
+        allUploadedImages.gpsImages!.forEach((uploadedImage: any) => {
             var icon = {
                 url: uploadedImage.imageUrl,
                 scaledSize: new google.maps.Size(75, 75)
@@ -62,7 +62,7 @@ const GoogleMap: FC<GoogleMapInterface> = ({
             //Interacting with image markers
             customImageMarker.addListener("click", (e: any) => {
                 const clickedImageName = e.domEvent.target.parentElement.title;
-                allMetaData.filter((el) => {
+                allUploadedImages.gpsImages!.filter((el) => {
                     if (el.imageName === clickedImageName) {
                         setCurrentImage(el);
                         setModalOpen(true);

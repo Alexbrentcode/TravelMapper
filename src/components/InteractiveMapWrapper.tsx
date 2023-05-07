@@ -11,12 +11,10 @@ import {
 } from "../helperMethods";
 
 const InteractiveMapWrapper: FC<InteractiveMapWrapperInterface> = ({
-    imageMetaData,
-    imagesWithoutGPSMetaData,
-    setImageMetaData,
-    setImagesWithoutGPSMetaData,
     tripObject,
-    setTripObject
+    setTripObject,
+    allUploadedImages,
+    setAllUploadedImages
 }) => {
     const initialState = {
         lat: 51.513974,
@@ -29,9 +27,10 @@ const InteractiveMapWrapper: FC<InteractiveMapWrapperInterface> = ({
     const [currentUnsetImage, setCurrentUnsetImage] = useState<any>();
 
     useEffect(() => {
-        if (imageMetaData.length > 0) {
-            let { meanLat, meanLng } =
-                calculateMidPointOfAllCoordinates(imageMetaData);
+        if (allUploadedImages.gpsImages!.length > 0) {
+            let { meanLat, meanLng } = calculateMidPointOfAllCoordinates(
+                allUploadedImages.gpsImages!
+            );
             //If numbers are valid, assign to centralPoint
             if (typeof meanLat === "number" && typeof meanLng === "number") {
                 setMapCentralPoint({
@@ -40,53 +39,53 @@ const InteractiveMapWrapper: FC<InteractiveMapWrapperInterface> = ({
                 });
             }
         }
-    }, [imageMetaData]);
+    }, [allUploadedImages.gpsImages!]);
 
-    useEffect(() => {
-        if (imageMetaData.length > 0) {
-            const sortedData = imageMetaData.sort(
-                (a: any, b: any) => a.dateTimeSeconds - b.dateTimeSeconds
-            );
-            setTripObject((prevState: any) => ({
-                ...prevState,
-                tripImages: sortedData
-            }));
-        }
-    }, [imageMetaData]);
+    // useEffect(() => {
+    //     if (allUploadedImages.gpsImages!.length > 0) {
+    //         const sortedData = allUploadedImages.gpsImages!.sort(
+    //             (a: any, b: any) => a.dateTimeSeconds - b.dateTimeSeconds
+    //         );
+    //         setTripObject((prevState: any) => ({
+    //             ...prevState,
+    //             tripImages: sortedData
+    //         }));
+    //     }
+    // }, [allUploadedImages.gpsImages!]);
 
-    useEffect(() => {
-        if (userSetCoordinates && currentUnsetImage) {
-            setCurrentUnsetImage(false);
-            console.log(userSetCoordinates);
-            setImageMetaData((prevState: any) => [
-                ...prevState,
-                {
-                    imageUrl:
-                        imagesWithoutGPSMetaData[currentUnsetImage.imageIdx]
-                            .imageUrl,
-                    imageName:
-                        imagesWithoutGPSMetaData[currentUnsetImage.imageIdx]
-                            .imageName,
-                    lat: userSetCoordinates!.lat,
-                    lng: userSetCoordinates!.lng,
-                    orientation: "",
-                    dateTime: ""
-                }
-            ]);
-            //Remove that item from state
-            removeItemFromState(
-                setImagesWithoutGPSMetaData,
-                imagesWithoutGPSMetaData,
-                currentUnsetImage.imageName
-            );
-        }
-    }, [userSetCoordinates]);
+    // useEffect(() => {
+    //     if (userSetCoordinates && currentUnsetImage) {
+    //         setCurrentUnsetImage(false);
+    //         console.log(userSetCoordinates);
+    //         setImageMetaData((prevState: any) => [
+    //             ...prevState,
+    //             {
+    //                 imageUrl:
+    //                     imagesWithoutGPSMetaData[currentUnsetImage.imageIdx]
+    //                         .imageUrl,
+    //                 imageName:
+    //                     imagesWithoutGPSMetaData[currentUnsetImage.imageIdx]
+    //                         .imageName,
+    //                 lat: userSetCoordinates!.lat,
+    //                 lng: userSetCoordinates!.lng,
+    //                 orientation: "",
+    //                 dateTime: ""
+    //             }
+    //         ]);
+    //         //Remove that item from state
+    //         removeItemFromState(
+    //             setImagesWithoutGPSMetaData,
+    //             imagesWithoutGPSMetaData,
+    //             currentUnsetImage.imageName
+    //         );
+    //     }
+    // }, [userSetCoordinates]);
 
     return (
         <>
             <GoogleMap
                 centralPosition={mapCentralPoint}
-                allMetaData={imageMetaData}
+                allUploadedImages={allUploadedImages}
                 setUserSetCoordinates={setUserSetCoordinates}
             />
         </>
