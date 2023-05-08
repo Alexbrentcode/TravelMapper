@@ -5,22 +5,19 @@ import {
     TripObject
 } from "../interfaces/SharedInterfaces";
 import ImageUpload from "../components/ImageUpload";
-import InteractiveMapWrapper from "../components/InteractiveMapWrapper";
-import MapObjectContaienr from "../components/MapObjectContaienr";
+import InteractiveMapWrapper from "../components/Map/InteractiveMapWrapper";
+import RouteContainer from "../components/Route/RouteContainer";
 import { initialPhotoState, initialState } from "../helperMethods";
 import { MapPageContainer } from "../styles/StyledComponents";
 
 const Homepage = () => {
-    // const [imageMetaData, setImageMetaData] = useState<TripImageObject[]>([]);
-    // const [imagesWithoutGPSMetaData, setImagesWithoutGPSMetaData] = useState<
-    //     TripImageObject[]
-    // >([]);
     const [tripObject, setTripObject] = useState<TripObject>(initialState);
     const [imageUploadComplete, setImageUploadComplete] =
         useState<boolean>(false);
     const [allUploadedImages, setAllUploadedImages] =
         useState<AllUploadedImagesInterface>(initialPhotoState);
-
+    const [selectedUnsetItem, setSelectedUnsetItem] =
+        useState<TripImageObject | null>(null);
     return (
         <>
             <MapPageContainer>
@@ -33,10 +30,12 @@ const Homepage = () => {
                     />
                 )}
                 {imageUploadComplete && (
-                    <MapObjectContaienr
+                    <RouteContainer
                         tripObject={tripObject}
                         allUploadedImages={allUploadedImages}
                         setAllUploadedImages={setAllUploadedImages}
+                        setSelectedUnsetItem={setSelectedUnsetItem}
+                        selectedUnsetItem={selectedUnsetItem}
                     />
                 )}
                 <InteractiveMapWrapper
@@ -44,6 +43,8 @@ const Homepage = () => {
                     setAllUploadedImages={setAllUploadedImages}
                     tripObject={tripObject}
                     setTripObject={setTripObject}
+                    selectedUnsetItem={selectedUnsetItem}
+                    setSelectedUnsetItem={setSelectedUnsetItem}
                 />
             </MapPageContainer>
         </>

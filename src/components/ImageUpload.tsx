@@ -1,9 +1,7 @@
-import { FC, useEffect, useState } from "react";
+import { FC, useState } from "react";
 import exifr from "exifr";
 import {
-    AllUploadedImagesInterface,
     ImageUploadInterface,
-    LocationDataObject,
     TripObject
 } from "../interfaces/SharedInterfaces";
 import { getGeoCodeByString } from "../api/Geocode/GeocodeApi";
@@ -17,8 +15,6 @@ import {
     SidePanelCustom,
     TextFieldCustom
 } from "../styles/StyledComponents";
-import styled from "@emotion/styled";
-import { all } from "axios";
 
 const ImageUpload: FC<ImageUploadInterface> = ({
     setTripObject,
@@ -34,10 +30,6 @@ const ImageUpload: FC<ImageUploadInterface> = ({
     const resetUploadedImageState = () => {
         setAllUploadedImages(initialPhotoState);
     };
-
-    useEffect(() => {
-        console.log(locationQueryResponse);
-    }, [locationQueryResponse]);
 
     const fetchStartLocationData = async () => {
         const res = await getGeoCodeByString(
@@ -115,7 +107,8 @@ const ImageUpload: FC<ImageUploadInterface> = ({
                             dateTimeSeconds: getDateBySecondsSinceEpoch(
                                 new Date(testAllData.DateTimeOriginal)
                             ),
-                            imageId: crypto.randomUUID()
+                            imageId: crypto.randomUUID(),
+                            isSet: true
                         }
                     ]
                 }));
@@ -127,9 +120,10 @@ const ImageUpload: FC<ImageUploadInterface> = ({
                         {
                             imageUrl: fileUrl,
                             imageName: thisImage.name,
-                            lat: "",
-                            lng: "",
-                            imageId: crypto.randomUUID()
+                            lat: undefined,
+                            lng: undefined,
+                            imageId: crypto.randomUUID(),
+                            isSet: false
                         }
                     ]
                 }));

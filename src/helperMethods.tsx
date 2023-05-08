@@ -6,7 +6,7 @@ import {
 } from "./interfaces/SharedInterfaces";
 import { useListState } from "@mantine/hooks";
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
-import ImageListObject from "./components/ImageListObject";
+import ImageListObject from "./components/Route/ImageListObject";
 import { useEffect, useState } from "react";
 dayjs().format();
 
@@ -19,11 +19,11 @@ export const getDateBySecondsSinceEpoch = (date: Date) => {
     return date.getTime();
 };
 
-export const removeItemFromState = (setState: any, state: any, key: string) => {
-    //Lookup current state to find item to remove
-    const index = state.findIndex((item: any) => item.imageName === key);
-    setState([...state.slice(0, index), ...state.slice(index + 1)]);
-};
+// export const removeItemFromState = (setState: any, state: any, key: string) => {
+//     //Lookup current state to find item to remove
+//     const index = state.findIndex((item: any) => item.imageName === key);
+//     setState([...state.slice(0, index), ...state.slice(index + 1)]);
+// };
 
 export const calculateMidPointOfAllCoordinates = (imageMetaData: any) => {
     //Assign totals...
@@ -34,6 +34,7 @@ export const calculateMidPointOfAllCoordinates = (imageMetaData: any) => {
     let [latitudeMean, longitudeMean] = [0, 0];
 
     imageMetaData.forEach((imageCoord: any) => {
+        console.log(imageCoord);
         isNaN(imageCoord.lat)
             ? latitudeCount--
             : (latitudeMean += imageCoord.lat);
@@ -71,13 +72,12 @@ export const initialPhotoState: AllUploadedImagesInterface = {
 
 export const dragAndDropComponent = (
     allUploadedImages: AllUploadedImagesInterface,
-    setAllUploadedImages: (value: any) => void
+    setAllUploadedImages: (value: any) => void,
+    setSelectedUnsetItem: (value: any) => void,
+    selectedUnsetItem: TripImageObject | null
 ) => {
     const setDroppableId = "set-images-dnd";
     const unsetDroppableId = "unset-images-dnd";
-    // const [allImageState, setAllImageState] =
-    //     useState<AllUploadedImagesInterface>(allUploadedImages);
-    // const [unsetImagesState, moreHandlers] = useListState(unsetImages);
     const setItems = allUploadedImages.gpsImages!.map(
         (item: any, index: number) => (
             <Draggable
@@ -92,7 +92,13 @@ export const dragAndDropComponent = (
                         {...provided.dragHandleProps}
                         ref={provided.innerRef}
                     >
-                        <ImageListObject item={item} />
+                        <ImageListObject
+                            item={item}
+                            index={index}
+                            setSelectedUnsetItem={setSelectedUnsetItem}
+                            selectedUnsetItem={selectedUnsetItem}
+                            listParent={setDroppableId}
+                        />
                     </div>
                 )}
             </Draggable>
@@ -113,7 +119,12 @@ export const dragAndDropComponent = (
                         {...provided.dragHandleProps}
                         ref={provided.innerRef}
                     >
-                        <ImageListObject item={item} />
+                        <ImageListObject
+                            item={item}
+                            setSelectedUnsetItem={setSelectedUnsetItem}
+                            selectedUnsetItem={selectedUnsetItem}
+                            listParent={unsetDroppableId}
+                        />
                     </div>
                 )}
             </Draggable>
