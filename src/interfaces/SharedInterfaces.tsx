@@ -13,6 +13,7 @@ export interface TripImageObject extends CoordianteInterface {
     orientation?: string;
     dateTime?: any;
     dateTimeSeconds?: any;
+    isSet?: boolean;
 }
 
 export interface TripObject {
@@ -44,7 +45,9 @@ export interface ImageUploadInterface {
 export interface GoogleMapInterface {
     allUploadedImages: AllUploadedImagesInterface;
     centralPosition: any;
-    setUserSetCoordinates: any;
+    selectedUnsetItem: TripImageObject | null;
+    setSelectedUnsetItem: (value: any) => void;
+    setAllUploadedImages: (value: any) => void;
 }
 
 export interface InteractiveMapWrapperInterface {
@@ -52,15 +55,14 @@ export interface InteractiveMapWrapperInterface {
     setAllUploadedImages: (value: any) => void;
     tripObject: any;
     setTripObject: (value: any) => void;
-}
-
-export interface UnsetImangeFooterInterface {
-    allUploadedImages: AllUploadedImagesInterface;
-    setAllUploadedImages: (value: any) => void;
+    selectedUnsetItem: TripImageObject | null;
+    setSelectedUnsetItem: (value: any) => void;
 }
 
 export interface MapObjectContainerInterface {
     tripObject: TripObject;
     allUploadedImages: AllUploadedImagesInterface;
     setAllUploadedImages: (value: any) => void;
+    setSelectedUnsetItem: (value: any) => void;
+    selectedUnsetItem: TripImageObject | null;
 }
